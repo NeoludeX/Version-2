@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChemMaster — USNCO Prep</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#07090f;--bg2:#0c0f1d;--bg3:#111527;--bg4:#181d35;--bg5:#1f2544;
+  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.13);
+  --text:#e2e8f7;--muted:#7a85a3;--dim:#3d4566;
+  --accent:#4f8ef7;--accent-soft:rgba(79,142,247,.12);
+  --cyan:#38d9d9;--green:#34d399;--amber:#fbbf24;
+  --purple:#a78bfa;--pink:#f472b6;--red:#f87171;--orange:#fb923c;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.65;min-height:100vh;overflow-x:hidden}
+.shell{display:flex;min-height:100vh}
+
+/* SIDEBAR */
+.sidebar{width:272px;min-width:272px;background:var(--bg2);border-right:1px solid var(--border);position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:100;display:flex;flex-direction:column;transition:transform .28s cubic-bezier(.4,0,.2,1)}
+.sidebar::-webkit-scrollbar{width:3px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:99px}
+.logo-wrap{padding:24px 20px 16px;border-bottom:1px solid var(--border);flex-shrink:0}
+.logo-row{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.logo-icon{width:34px;height:34px;background:var(--accent);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px}
+.logo-text{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:17px;letter-spacing:-.2px}
+.logo-sub{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.09em}
+.prog-wrap{background:var(--bg3);border-radius:10px;padding:12px 14px}
+.prog-row{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:7px}
+.prog-track{height:3px;background:var(--border2);border-radius:99px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--cyan));border-radius:99px;transition:width .5s cubic-bezier(.4,0,.2,1);width:0%}
+.nav-section{padding:12px 20px 6px;font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;font-weight:500}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:9px;cursor:pointer;transition:all .15s;margin:1px 8px;user-select:none}
+.nav-item:hover{background:var(--bg3)}
+.nav-item.active{background:var(--accent-soft);border:1px solid rgba(79,142,247,.22)}
+.nav-num{width:24px;height:24px;border-radius:6px;background:var(--bg4);font-size:11px;font-weight:600;font-family:'Space Grotesk',sans-serif;display:flex;align-items:center;justify-content:center;color:var(--muted);flex-shrink:0;transition:all .15s}
+.nav-item.active .nav-num{background:var(--accent);color:#fff}
+.nav-item.done .nav-num{background:var(--green);color:#000}
+.nav-label{font-size:12.5px;color:var(--muted);line-height:1.3;transition:color .15s}
+.nav-item.active .nav-label,.nav-item:hover .nav-label{color:var(--text)}
+.sidebar-foot{margin-top:auto;padding:14px 20px;border-top:1px solid var(--border);font-size:11px;color:var(--dim);flex-shrink:0}
+
+/* MAIN */
+.main{margin-left:272px;flex:1;display:flex;flex-direction:column;min-height:100vh}
+
+/* TOPBAR */
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:14px 36px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;gap:16px}
+.topbar-left{display:flex;align-items:center;gap:12px;min-width:0}
+.hamburger{display:none;flex-direction:column;gap:4px;cursor:pointer;padding:7px;background:var(--bg3);border:1px solid var(--border2);border-radius:7px;flex-shrink:0}
+.hamburger span{width:16px;height:1.5px;background:var(--muted);border-radius:99px;display:block}
+.topbar-info{min-width:0}
+.tb-crumb{font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.07em}
+.tb-title{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topbar-right{display:flex;gap:8px;flex-shrink:0}
+.btn{padding:7px 16px;border-radius:7px;font-size:12.5px;font-weight:500;cursor:pointer;transition:all .15s;border:none;font-family:'Inter',sans-serif;white-space:nowrap}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border2)}
+.btn-ghost:hover{color:var(--text);background:var(--bg3)}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:#6fa3ff}
+.btn-done{background:rgba(52,211,153,.15);color:var(--green);border:1px solid rgba(52,211,153,.25)}
+.btn-done:hover{background:rgba(52,211,153,.25)}
+
+/* CONTENT */
+.content-wrap{padding:36px 40px;max-width:940px;animation:fadeUp .3s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* HERO */
+.unit-badge{display:inline-flex;align-items:center;gap:6px;background:var(--accent-soft);border:1px solid rgba(79,142,247,.2);color:var(--accent);font-size:10.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;padding:5px 12px;border-radius:99px;margin-bottom:14px}
+.unit-hero h1{font-family:'Space Grotesk',sans-serif;font-size:34px;font-weight:700;letter-spacing:-.5px;line-height:1.18;margin-bottom:12px}
+.unit-hero p.lead{font-size:15.5px;color:var(--muted);line-height:1.7;max-width:700px;margin-bottom:20px}
+.hero-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:32px}
+.htag{background:var(--bg3);border:1px solid var(--border);color:var(--muted);font-size:12px;padding:4px 12px;border-radius:99px}
+
+/* SECTION */
+.section{margin-bottom:44px}
+.sec-hdr{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.sec-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.sec-title{font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.divider{height:1px;background:var(--border);margin:36px 0}
+
+/* CARDS */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:12px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:13px;padding:18px;transition:all .18s;cursor:default}
+.card:hover{background:var(--bg3);border-color:var(--border2);transform:translateY(-2px)}
+.card-icon{font-size:20px;margin-bottom:10px}
+.card h3{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;margin-bottom:7px;color:var(--text)}
+.card p{font-size:12.5px;color:var(--muted);line-height:1.6}
+
+/* FORMULAS */
+.formula-list{display:flex;flex-direction:column;gap:10px}
+.formula-row{background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:16px 20px;display:flex;align-items:flex-start;gap:16px}
+.formula-row:hover{border-color:var(--border2)}
+.feq{font-family:'JetBrains Mono',monospace;font-size:14.5px;font-weight:500;color:var(--cyan);min-width:220px;flex-shrink:0;line-height:1.5}
+.fdesc{font-size:12.5px;color:var(--muted);line-height:1.6}
+.fdesc strong{color:var(--text);font-weight:500}
+
+/* TABLE */
+.tbl-wrap{overflow-x:auto;border-radius:11px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{background:var(--bg3);color:var(--muted);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;font-weight:500;padding:10px 14px;text-align:left;white-space:nowrap}
+td{padding:9px 14px;border-top:1px solid var(--border);color:var(--text);vertical-align:top}
+tr:hover td{background:var(--bg2)}
+
+/* HIGHLIGHT BOXES */
+.hbox{border-radius:11px;padding:16px 20px;margin-bottom:14px;border-left:3px solid}
+.hbox-blue{background:rgba(79,142,247,.06);border-color:var(--accent)}
+.hbox-green{background:rgba(52,211,153,.06);border-color:var(--green)}
+.hbox-amber{background:rgba(251,191,36,.06);border-color:var(--amber)}
+.hbox-purple{background:rgba(167,139,250,.06);border-color:var(--purple)}
+.hbox-red{background:rgba(248,113,113,.06);border-color:var(--red)}
+.hbox-cyan{background:rgba(56,217,217,.06);border-color:var(--cyan)}
+.hbox h4{font-family:'Space Grotesk',sans-serif;font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px}
+.hbox-blue h4{color:var(--accent)} .hbox-green h4{color:var(--green)} .hbox-amber h4{color:var(--amber)}
+.hbox-purple h4{color:var(--purple)} .hbox-red h4{color:var(--red)} .hbox-cyan h4{color:var(--cyan)}
+.hbox p,.hbox li{font-size:13px;color:var(--muted);line-height:1.65}
+.hbox ul{padding-left:18px}.hbox li{margin-bottom:4px}
+
+/* STEPS */
+.steps{display:flex;flex-direction:column}
+.step{display:flex;gap:16px;position:relative}
+.step:not(:last-child)::before{content:'';position:absolute;left:14px;top:32px;bottom:0;width:1px;background:var(--border2)}
+.step-n{width:28px;height:28px;border-radius:50%;background:var(--bg4);border:1px solid var(--border2);font-size:12px;font-weight:600;font-family:'Space Grotesk',sans-serif;display:flex;align-items:center;justify-content:center;color:var(--accent);flex-shrink:0;margin-top:2px}
+.step-body{padding-bottom:24px;flex:1}
+.step-body h4{font-family:'Space Grotesk',sans-serif;font-size:13.5px;font-weight:600;margin-bottom:5px}
+.step-body p{font-size:12.5px;color:var(--muted);line-height:1.6}
+
+/* TAGS */
+.pill{display:inline-block;padding:2px 9px;border-radius:99px;font-size:11px;font-weight:500}
+.pill-blue{background:rgba(79,142,247,.15);color:var(--accent)}
+.pill-green{background:rgba(52,211,153,.15);color:var(--green)}
+.pill-amber{background:rgba(251,191,36,.15);color:var(--amber)}
+.pill-red{background:rgba(248,113,113,.15);color:var(--red)}
+.pill-purple{background:rgba(167,139,250,.15);color:var(--purple)}
+.pill-cyan{background:rgba(56,217,217,.15);color:var(--cyan)}
+
+/* HOME */
+.home-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.home-card{background:var(--bg2);border:1px solid var(--border);border-radius:13px;padding:18px 20px;cursor:pointer;transition:all .18s;position:relative;overflow:hidden}
+.home-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;opacity:0;transition:opacity .2s}
+.home-card:hover{background:var(--bg3);border-color:var(--border2);transform:translateY(-2px)}
+.home-card:hover::before{opacity:1}
+.hc-num{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.hc-title{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;margin-bottom:6px;color:var(--text)}
+.hc-topics{font-size:12px;color:var(--muted);line-height:1.5}
+.hc-badge{display:inline-block;margin-top:10px;font-size:10.5px;padding:3px 9px;border-radius:99px}
+.done-badge{background:rgba(52,211,153,.15);color:var(--green)}
+.todo-badge{background:var(--bg4);color:var(--dim)}
+
+/* OVERLAY */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:99}
+.overlay.show{display:block}
+
+/* RESPONSIVE */
+@media(max-width:800px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .content-wrap{padding:24px 18px}
+  .unit-hero h1{font-size:26px}
+  .topbar{padding:12px 18px}
+  .hamburger{display:flex}
+  .formula-row{flex-direction:column;gap:6px}
+  .feq{min-width:unset}
+}
+</style>
+</head>
+<body>
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+<div class="shell">
+
+<nav class="sidebar" id="sidebar">
+  <div class="logo-wrap">
+    <div class="logo-row">
+      <div class="logo-icon">⚗️</div>
+      <div><div class="logo-text">ChemMaster</div><div class="logo-sub">USNCO Prep</div></div>
+    </div>
+    <div class="prog-wrap">
+      <div class="prog-row"><span>Progress</span><span id="prog-text">0 / 15</span></div>
+      <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
+    </div>
+  </div>
+  <div class="nav-section">15 Units</div>
+  <div id="nav-list"></div>
+  <div class="sidebar-foot">USNCO Chemistry · Study Guide</div>
+</nav>
+
+<div class="main">
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="hamburger" onclick="toggleSidebar()"><span></span><span></span><span></span></div>
+      <div class="topbar-info"><div class="tb-crumb" id="tb-crumb">USNCO Prep</div><div class="tb-title" id="tb-title">All Units</div></div>
+    </div>
+    <div class="topbar-right">
+      <button class="btn btn-ghost" id="btn-prev" onclick="navUnit(-1)">← Prev</button>
+      <button class="btn btn-done" id="btn-done" onclick="toggleDone()">✓ Mark Done</button>
+      <button class="btn btn-primary" id="btn-next" onclick="navUnit(1)">Next →</button>
+    </div>
+  </header>
+  <div id="content-area"></div>
+</div>
+</div>
+
+<script>
+// ─── DATA ───────────────────────────────────────────────────────────────────
+const UNITS = [
+  {
+    id:1, title:"Atomic Structure & Periodicity", emoji:"⚛️",
+    topics:["Structure of the atom","Subatomic particles","Isotopes","Quantum numbers","Electron configuration","Orbital shapes","Effective nuclear charge","Periodic trends","Photoelectron spectroscopy"],
+    lead:"The foundation of all chemistry. Understand how electrons are arranged, how atoms differ, and how position on the periodic table predicts behavior.",
+    content:`
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(79,142,247,.12)">🧱</div><div class="sec-title">Core Concepts</div></div>
+      <div class="card-grid">
+        <div class="card"><div class="card-icon">🔢</div><h3>Subatomic Particles</h3><p>Proton (+1, in nucleus), neutron (0, in nucleus), electron (−1, around nucleus). Atomic number Z = proton count. Mass number A = protons + neutrons. Electrons = protons in neutral atom.</p></div>
+        <div class="card"><div class="card-icon">⚖️</div><h3>Isotopes & Mass</h3><p>Same element, different neutron count. Average atomic mass = Σ(isotope mass × natural abundance as decimal). Mass spectrometry separates by mass-to-charge ratio (m/z).</p></div>
+        <div class="card"><div class="card-icon">🌊</div><h3>Quantum Numbers</h3><p><strong>n</strong>: principal (shell, energy level, 1,2,3…) · <strong>ℓ</strong>: angular momentum (0=s, 1=p, 2=d, 3=f) · <strong>mℓ</strong>: magnetic (−ℓ to +ℓ) · <strong>ms</strong>: spin (+½ or −½). No two electrons share all four.</p></div>
+        <div class="card"><div class="card-icon">📐</div><h3>Orbital Shapes</h3><p>s orbitals: spherical. p orbitals: dumbbell along x, y, or z axes (3 total). d orbitals: 5 complex shapes. f orbitals: 7 shapes. Higher n → larger, higher energy orbital.</p></div>
+        <div class="card"><div class="card-icon">⚡</div><h3>Effective Nuclear Charge</h3><p>Z<sub>eff</sub> = Z − σ (shielding). Inner electrons shield outer electrons from the full nuclear charge. Increases across a period → explains most periodic trends.</p></div>
+        <div class="card"><div class="card-icon">📉</div><h3>Photoelectron Spectroscopy</h3><p>Measures binding energy of electrons in each subshell. Peak position = binding energy (closer to nucleus = higher). Peak height ∝ electron count. Lower binding = outermost electrons.</p></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(56,217,217,.12)">📐</div><div class="sec-title">Key Formulas</div></div>
+      <div class="formula-list">
+        <div class="formula-row"><div class="feq">E = hν = hc/λ</div><div class="fdesc"><strong>Photon energy.</strong> h = 6.626×10⁻³⁴ J·s, ν = frequency (Hz), c = 3.0×10⁸ m/s, λ = wavelength. Higher frequency = higher energy.</div></div>
+        <div class="formula-row"><div class="feq">avg mass = Σ(mᵢ × fᵢ)</div><div class="fdesc"><strong>Weighted average atomic mass.</strong> mᵢ = mass of isotope i, fᵢ = fractional abundance (percent ÷ 100).</div></div>
+        <div class="formula-row"><div class="feq">Z_eff ≈ Z − σ</div><div class="fdesc"><strong>Effective nuclear charge.</strong> σ = shielding constant (sum of inner electron contributions). Slater's rules give σ for each electron precisely.</div></div>
+        <div class="formula-row"><div class="feq">n = 1, 2, 3 … shells: 2n² e⁻</div><div class="fdesc"><strong>Max electrons per shell.</strong> n=1→2, n=2→8, n=3→18, n=4→32. Subshell capacity: s=2, p=6, d=10, f=14.</div></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(167,139,250,.12)">📋</div><div class="sec-title">Electron Configuration Rules</div></div>
+      <div class="steps">
+        <div class="step"><div class="step-n">1</div><div class="step-body"><h4>Aufbau Principle</h4><p>Fill lowest energy orbitals first. Order: 1s 2s 2p 3s 3p 4s 3d 4p 5s 4d 5p 6s 4f 5d 6p … (use diagonal arrow rule or memorize).</p></div></div>
+        <div class="step"><div class="step-n">2</div><div class="step-body"><h4>Pauli Exclusion Principle</h4><p>Each orbital holds max 2 electrons with opposite spins (↑↓). No two electrons in the same atom share all four quantum numbers.</p></div></div>
+        <div class="step"><div class="step-n">3</div><div class="step-body"><h4>Hund's Rule</h4><p>Within a subshell, place one electron in each orbital before pairing. All singly occupied orbitals have same spin. Minimizes repulsion.</p></div></div>
+        <div class="step"><div class="step-n">4</div><div class="step-body"><h4>Key Exceptions</h4><p>Cr = [Ar] 3d⁵ 4s¹ and Cu = [Ar] 3d¹⁰ 4s¹ — half-filled and full d subshells are extra stable. Know Mo, Ag similarly.</p></div></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(251,191,36,.12)">📊</div><div class="sec-title">Periodic Trends</div></div>
+      <div class="tbl-wrap"><table><thead><tr><th>Property</th><th>Across Period →</th><th>Down Group ↓</th><th>Reason</th></tr></thead><tbody>
+        <tr><td>Atomic Radius</td><td>Decreases</td><td>Increases</td><td>More protons pull electrons in; more shells add size</td></tr>
+        <tr><td>1st Ionization Energy</td><td>Increases (exceptions: B&lt;Be, O&lt;N)</td><td>Decreases</td><td>Higher Z_eff holds electrons more tightly</td></tr>
+        <tr><td>Electron Affinity</td><td>Generally increases</td><td>Generally decreases</td><td>Halogens highest; noble gases anomalous</td></tr>
+        <tr><td>Electronegativity</td><td>Increases</td><td>Decreases</td><td>F = 4.0 (highest); Fr lowest</td></tr>
+        <tr><td>Ionic Radius (cation)</td><td>Smaller than parent atom</td><td>Increases</td><td>Losing electrons → less shielding, more nuclear pull</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="hbox hbox-amber"><h4>⚠ USNCO Exam Tips</h4><ul>
+      <li>IE exceptions: B &lt; Be (2p easier to remove than 2s) and O &lt; N (paired 2p electron easier to remove)</li>
+      <li>PES: always identify subshells from right (lowest BE = outermost); peak area = relative electron count</li>
+      <li>Isoelectronic species: same e⁻ count, different Z → compare radius using nuclear charge</li>
+      <li>Transition metals: fill 4s before 3d, but lose 4s electrons FIRST when forming cations</li>
+    </ul></div>`
+  },
+  {
+    id:2, title:"Bonding & Molecular Structure", emoji:"🔗",
+    topics:["Ionic vs covalent","Polar bonds","Lewis structures","Resonance & formal charge","VSEPR","Hybridization","Bond order & energy","IMFs","Lattice energy"],
+    lead:"From electron transfer to electron sharing — understand how and why atoms bond, how to visualize molecular geometry, and how structure drives properties.",
+    content:`
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(56,217,217,.12)">🔗</div><div class="sec-title">Bond Types</div></div>
+      <div class="card-grid">
+        <div class="card"><div class="card-icon">🔵</div><h3>Ionic Bonding</h3><p>Electron transfer from metal to nonmetal. Held together by electrostatic attraction. Hard, high-melting, brittle solids. Conduct electricity when molten or dissolved. Strength ∝ charge²/radius (lattice energy).</p></div>
+        <div class="card"><div class="card-icon">🤝</div><h3>Covalent Bonding</h3><p>Electron sharing between nonmetals. Single (σ), double (σ+π), triple (σ+2π). Higher bond order → shorter, stronger bond. Bond polarity determined by electronegativity difference.</p></div>
+        <div class="card"><div class="card-icon">🪨</div><h3>Metallic Bonding</h3><p>Cations in a delocalized "electron sea." Explains electrical conductivity, thermal conductivity, malleability, and luster. Stronger with higher charge density.</p></div>
+        <div class="card"><div class="card-icon">↔️</div><h3>Resonance</h3><p>When multiple valid Lewis structures exist, the real structure is a hybrid. Electron density is delocalized. All resonance structures contribute; most stable = lowest formal charges on most electronegative atoms.</p></div>
+        <div class="card"><div class="card-icon">🔢</div><h3>Formal Charge</h3><p>FC = (valence e⁻) − (lone pair e⁻) − ½(bonding e⁻). Best structure minimizes formal charges. Negative FC goes on most electronegative atom. Sum of FCs = overall charge.</p></div>
+        <div class="card"><div class="card-icon">🏗️</div><h3>Hybridization</h3><p>sp: linear (180°) · sp²: trigonal planar (120°) · sp³: tetrahedral (109.5°) · sp³d: trigonal bipyramidal · sp³d²: octahedral. Count electron domains (bonds + lone pairs) on central atom to determine.</p></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(79,142,247,.12)">📐</div><div class="sec-title">VSEPR Geometry Table</div></div>
+      <div class="tbl-wrap"><table><thead><tr><th>e⁻ Domains</th><th>Lone Pairs</th><th>Molecular Shape</th><th>Bond Angle</th><th>Example</th></tr></thead><tbody>
+        <tr><td>2</td><td>0</td><td>Linear</td><td>180°</td><td>CO₂, BeCl₂</td></tr>
+        <tr><td>3</td><td>0</td><td>Trigonal planar</td><td>120°</td><td>BF₃, SO₃</td></tr>
+        <tr><td>3</td><td>1</td><td>Bent</td><td>&lt;120°</td><td>SO₂, O₃</td></tr>
+        <tr><td>4</td><td>0</td><td>Tetrahedral</td><td>109.5°</td><td>CH₄, NH₄⁺</td></tr>
+        <tr><td>4</td><td>1</td><td>Trigonal pyramidal</td><td>&lt;109.5°</td><td>NH₃, PCl₃</td></tr>
+        <tr><td>4</td><td>2</td><td>Bent</td><td>&lt;109.5°</td><td>H₂O, H₂S</td></tr>
+        <tr><td>5</td><td>0</td><td>Trigonal bipyramidal</td><td>90°/120°</td><td>PCl₅</td></tr>
+        <tr><td>5</td><td>1</td><td>See-saw</td><td>&lt;90°/120°</td><td>SF₄</td></tr>
+        <tr><td>5</td><td>2</td><td>T-shaped</td><td>&lt;90°</td><td>ClF₃</td></tr>
+        <tr><td>6</td><td>0</td><td>Octahedral</td><td>90°</td><td>SF₆</td></tr>
+        <tr><td>6</td><td>1</td><td>Square pyramidal</td><td>&lt;90°</td><td>BrF₅</td></tr>
+        <tr><td>6</td><td>2</td><td>Square planar</td><td>90°</td><td>XeF₄, [PtCl₄]²⁻</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(251,191,36,.12)">🧲</div><div class="sec-title">Intermolecular Forces (Strongest → Weakest)</div></div>
+      <div class="card-grid">
+        <div class="card"><div class="card-icon">⊕</div><h3>Ion-Dipole</h3><p>Ion + polar molecule. Strongest IMF. Drives dissolution of ionic compounds in polar solvents. Critical in aqueous solutions.</p></div>
+        <div class="card"><div class="card-icon">💧</div><h3>Hydrogen Bonding</h3><p>H bonded to F, O, or N interacting with lone pair on F, O, or N of another molecule. ~20 kJ/mol. Explains water's anomalously high bp, surface tension, ice density.</p></div>
+        <div class="card"><div class="card-icon">↕️</div><h3>Dipole-Dipole</h3><p>Between permanent dipoles. Requires polar molecule. Positive end attracts negative end of neighbor. Stronger for larger dipole moments.</p></div>
+        <div class="card"><div class="card-icon">🌐</div><h3>London Dispersion Forces</h3><p>Temporary dipoles in ALL molecules. Strength ∝ molar mass and surface area. Branching decreases surface area → lower LDF → lower boiling point.</p></div>
+      </div>
+    </div>
+    <div class="hbox hbox-blue"><h4>💡 Lattice Energy</h4><ul>
+      <li>Energy released when gaseous ions form a crystalline solid</li>
+      <li>Larger lattice energy = harder, higher melting, less soluble solid</li>
+      <li>Lattice energy ∝ |charge₁ × charge₂| / (r₊ + r₋) (Born-Landé concept)</li>
+      <li>MgO &gt; NaF (2+ and 2− charges vs 1+ and 1−, similar radii)</li>
+      <li>Determined experimentally using Born-Haber cycle (Hess's Law)</li>
+    </ul></div>
+    <div class="hbox hbox-amber"><h4>⚠ USNCO Tips</h4><ul>
+      <li>Expanded octets only for Period 3+ central atoms (S, P, Cl, Xe, etc.)</li>
+      <li>CO₂ linear → dipoles cancel → nonpolar. H₂O bent → dipoles don't cancel → polar</li>
+      <li>Hybridization: count σ bonds + lone pairs on central atom (π bonds don't count)</li>
+      <li>For USNCO: know bond angles deviate because lone pair-lone pair > lone pair-bond > bond-bond repulsion</li>
+    </ul></div>`
+  },
+  {
+    id:3, title:"Stoichiometry & Chemical Reactions", emoji:"⚗️",
+    topics:["Balancing equations","Limiting reagents","Percent yield","Empirical/molecular formulas","Solution stoichiometry","Redox","Acid-base","Precipitation","Net ionic equations"],
+    lead:"The language of chemistry — quantitative relationships between reactants and products, types of reactions, and how to balance and use them for calculations.",
+    content:`
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(52,211,153,.12)">🔢</div><div class="sec-title">Key Formulas</div></div>
+      <div class="formula-list">
+        <div class="formula-row"><div class="feq">n = m / M</div><div class="fdesc"><strong>Moles = mass / molar mass.</strong> M in g/mol. Foundation of all stoichiometry. Always check units.</div></div>
+        <div class="formula-row"><div class="feq">% yield = (actual / theoretical) × 100</div><div class="fdesc"><strong>Percent yield.</strong> Theoretical from limiting reagent calc. Actual measured experimentally.</div></div>
+        <div class="formula-row"><div class="feq">M = n / V(L)</div><div class="fdesc"><strong>Molarity.</strong> Moles of solute per liter of solution. Most common AP/USNCO concentration unit.</div></div>
+        <div class="formula-row"><div class="feq">M₁V₁ = M₂V₂</div><div class="fdesc"><strong>Dilution equation.</strong> Moles are conserved. Solve for any unknown given the other three.</div></div>
+        <div class="formula-row"><div class="feq">% comp = (mass element / molar mass) × 100</div><div class="fdesc"><strong>Percent composition.</strong> First step to finding empirical formula from gravimetric data.</div></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(52,211,153,.12)">🔥</div><div class="sec-title">Reaction Types</div></div>
+      <div class="card-grid">
+        <div class="card"><div class="card-icon">🔄</div><h3>Redox</h3><p>Electron transfer. OIL RIG. Oxidizing agent is reduced; reducing agent is oxidized. Assign oxidation states to identify. Balance by half-reaction method in acidic or basic solution.</p></div>
+        <div class="card"><div class="card-icon">🧪</div><h3>Acid-Base</h3><p>Proton transfer (Brønsted-Lowry). Strong acids/bases fully dissociate. Weak ones partially. Neutralization: acid + base → salt + water. Net ionic for strong+strong: H⁺ + OH⁻ → H₂O.</p></div>
+        <div class="card"><div class="card-icon">⬇️</div><h3>Precipitation</h3><p>Two soluble ionic compounds mix → insoluble product forms. Use solubility rules to identify precipitate. Write net ionic equation by removing spectator ions.</p></div>
+        <div class="card"><div class="card-icon">💨</div><h3>Combustion</h3><p>Hydrocarbon + O₂ → CO₂ + H₂O (complete). Incomplete combustion also produces CO or C(s). Always exothermic. Balance C first, then H, then O.</p></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(79,142,247,.12)">⚙️</div><div class="sec-title">Limiting Reagent — Method</div></div>
+      <div class="steps">
+        <div class="step"><div class="step-n">1</div><div class="step-body"><h4>Balance the equation</h4><p>Correct mole ratios are essential — don't skip this.</p></div></div>
+        <div class="step"><div class="step-n">2</div><div class="step-body"><h4>Convert all reactants to moles</h4><p>Use molar mass (g → mol) or M × V (solution → mol).</p></div></div>
+        <div class="step"><div class="step-n">3</div><div class="step-body"><h4>Divide by stoichiometric coefficient</h4><p>The reactant with the smallest moles-per-coefficient value is the limiting reagent.</p></div></div>
+        <div class="step"><div class="step-n">4</div><div class="step-body"><h4>Calculate product from limiting reagent only</h4><p>Use mole ratio → moles of product → grams of product (theoretical yield).</p></div></div>
+        <div class="step"><div class="step-n">5</div><div class="step-body"><h4>Find excess reagent remaining</h4><p>Moles LR used × (coeff excess / coeff LR) = moles excess used. Remaining = initial − used.</p></div></div>
+      </div>
+    </div>
+    <div class="hbox hbox-green"><h4>✓ Solubility Rules (Memorize)</h4><ul>
+      <li>Always soluble: NO₃⁻, CH₃COO⁻, ClO₄⁻, Group 1 cations, NH₄⁺</li>
+      <li>Usually soluble: Cl⁻, Br⁻, I⁻ — except with Ag⁺, Pb²⁺, Hg₂²⁺</li>
+      <li>Usually soluble: SO₄²⁻ — except BaSO₄, PbSO₄, CaSO₄, Ag₂SO₄</li>
+      <li>Usually insoluble: CO₃²⁻, PO₄³⁻, S²⁻, OH⁻, CrO₄²⁻ — except Group 1 + NH₄⁺</li>
+    </ul></div>
+    <div class="hbox hbox-purple"><h4>🔄 Balancing Redox (Acidic Solution)</h4><ul>
+      <li>1. Write unbalanced half-reactions</li>
+      <li>2. Balance atoms (except O and H)</li>
+      <li>3. Add H₂O to balance O</li>
+      <li>4. Add H⁺ to balance H</li>
+      <li>5. Add e⁻ to balance charge</li>
+      <li>6. Multiply half-reactions so electrons cancel; add together</li>
+      <li>Basic solution: after step 6, add OH⁻ to both sides to cancel H⁺</li>
+    </ul></div>
+    <div class="hbox hbox-amber"><h4>⚠ USNCO Tips</h4><ul>
+      <li>Empirical formula: divide percent comp by atomic mass → divide by smallest → get whole numbers</li>
+      <li>Molecular formula: (empirical formula) × n where n = molar mass / empirical formula mass</li>
+      <li>Oxidation state rules: O = −2 (except peroxides −1, OF₂ +2); H = +1 (except metal hydrides −1); sum = charge</li>
+    </ul></div>`
+  },
+  {
+    id:4, title:"Gases", emoji:"💨",
+    topics:["Ideal gas law","Combined gas law","Dalton's law","Partial pressures","Kinetic molecular theory","Maxwell-Boltzmann distribution","Real gases","van der Waals"],
+    lead:"Model gas behavior with powerful laws — from the ideal case to real gas corrections. Understand the molecular basis of pressure, temperature, and diffusion.",
+    content:`
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(79,142,247,.12)">💨</div><div class="sec-title">Key Gas Laws & Formulas</div></div>
+      <div class="formula-list">
+        <div class="formula-row"><div class="feq">PV = nRT</div><div class="fdesc"><strong>Ideal Gas Law.</strong> R = 0.08206 L·atm/mol·K or 8.314 J/mol·K. T must be in Kelvin. STP: 0°C, 1 atm → 22.4 L/mol.</div></div>
+        <div class="formula-row"><div class="feq">P₁V₁/T₁ = P₂V₂/T₂</div><div class="fdesc"><strong>Combined Gas Law.</strong> For a fixed amount of gas. Remove variables that stay constant (e.g., constant T → Boyle's Law: P₁V₁ = P₂V₂).</div></div>
+        <div class="formula-row"><div class="feq">Pₜₒₜₐₗ = P₁ + P₂ + P₃ + …</div><div class="fdesc"><strong>Dalton's Law of Partial Pressures.</strong> Each gas exerts pressure independently. Mole fraction: χᵢ = nᵢ/nₜₒₜₐₗ, so Pᵢ = χᵢ × Pₜₒₜₐₗ.</div></div>
+        <div class="formula-row"><div class="feq">KE_avg = (3/2)RT</div><div class="fdesc"><strong>Average kinetic energy per mole.</strong> Depends ONLY on temperature. All gases at same T have same average KE, regardless of molar mass.</div></div>
+        <div class="formula-row"><div class="feq">u_rms = √(3RT/M)</div><div class="fdesc"><strong>Root-mean-square speed.</strong> M = molar mass in kg/mol. Lighter gases move faster. Explains Graham's law of effusion: rate ∝ 1/√M.</div></div>
+        <div class="formula-row"><div class="feq">(P + an²/V²)(V − nb) = nRT</div><div class="fdesc"><strong>van der Waals equation.</strong> a corrects for intermolecular attractions (reduces pressure); b corrects for molecular volume. Real gases deviate most at high P, low T.</div></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(56,217,217,.12)">⚡</div><div class="sec-title">Kinetic Molecular Theory (KMT)</div></div>
+      <div class="card-grid">
+        <div class="card"><div class="card-icon">🎯</div><h3>5 Postulates</h3><p>1) Gas particles are tiny with negligible volume. 2) Particles in constant random motion. 3) No intermolecular forces. 4) Elastic collisions. 5) Average KE ∝ absolute temperature.</p></div>
+        <div class="card"><div class="card-icon">📊</div><h3>Maxwell-Boltzmann Distribution</h3><p>Bell-curve-shaped distribution of molecular speeds. Higher T → peak shifts right (faster) and broadens. Heavier molecules → peak shifts left. Area under curve = 1 (all molecules).</p></div>
+        <div class="card"><div class="card-icon">🌡️</div><h3>Pressure Explained</h3><p>Pressure = force of molecular collisions per unit area. More collisions (higher T, more molecules, smaller volume) → higher pressure. Directly proportional to temperature at constant V and n.</p></div>
+        <div class="card"><div class="card-icon">💨</div><h3>Diffusion vs Effusion</h3><p>Diffusion: gas spreading through space. Effusion: gas escaping through a small hole. Graham's Law: rate of effusion ∝ 1/√M. Lighter gases effuse faster.</p></div>
+      </div>
+    </div>
+    <div class="hbox hbox-blue"><h4>💡 Real vs Ideal Gases</h4><ul>
+      <li>Ideal behavior: high T, low P (molecules far apart, moving fast — KMT assumptions hold)</li>
+      <li>Real gas deviates at: high P (volume correction, b), low T (attraction correction, a)</li>
+      <li>At very high P, Z = PV/nRT > 1 (repulsions dominate — molecules take up space)</li>
+      <li>At moderate P and low T, Z &lt; 1 (attractions dominate — lower pressure than ideal)</li>
+      <li>Noble gases: smallest a and b (weakest IMFs, smallest size)</li>
+    </ul></div>
+    <div class="hbox hbox-amber"><h4>⚠ USNCO Tips</h4><ul>
+      <li>Mole fraction is dimensionless: χ = n_gas / n_total — useful for partial pressure calculations</li>
+      <li>When collecting gas over water: P_gas = P_total − P_water (water vapor pressure is given or known)</li>
+      <li>Root-mean-square speed ≠ average speed, but both ∝ √T and ∝ 1/√M</li>
+      <li>USNCO loves Maxwell-Boltzmann: know what shifts the peak and what changes the width</li>
+    </ul></div>`
+  },
+  {
+    id:5, title:"Thermochemistry", emoji:"🔥",
+    topics:["Enthalpy (ΔH)","Calorimetry","Coffee-cup vs bomb calorimetry","Hess's law","Standard enthalpies of formation","Heating curves & phase changes"],
+    lead:"Quantify heat flow in chemical reactions. From calorimetry to Hess's law and standard enthalpies — understand energy changes at constant pressure and volume.",
+    content:`
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(251,191,36,.12)">🌡️</div><div class="sec-title">Key Formulas</div></div>
+      <div class="formula-list">
+        <div class="formula-row"><div class="feq">q = mcΔT</div><div class="fdesc"><strong>Heat transfer.</strong> m = mass (g), c = specific heat capacity (J/g·K), ΔT = T_final − T_initial. For water: c = 4.184 J/g·K.</div></div>
+        <div class="formula-row"><div class="feq">q_rxn = −q_calorimeter</div><div class="fdesc"><strong>Conservation of energy.</strong> Heat lost by reaction = heat gained by solution (or vice versa). Exothermic rxn: q_rxn &lt; 0, q_cal &gt; 0.</div></div>
+        <div class="formula-row"><div class="feq">ΔH°_rxn = Σ ΔH°f(products) − Σ ΔH°f(reactants)</div><div class="fdesc"><strong>Standard enthalpy from formation enthalpies.</strong> ΔH°f of elements in standard state = 0.</div></div>
+        <div class="formula-row"><div class="feq">ΔH_rxn = Σ BE(bonds broken) − Σ BE(bonds formed)</div><div class="fdesc"><strong>Bond energy method.</strong> Breaking bonds requires energy; forming bonds releases. Approximate (gas phase only).</div></div>
+        <div class="formula-row"><div class="feq">q_bomb = C_cal × ΔT</div><div class="fdesc"><strong>Bomb calorimeter.</strong> C_cal = heat capacity of calorimeter (J/°C or J/K). Measures ΔE (constant volume), not ΔH directly.</div></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(251,191,36,.12)">⚖️</div><div class="sec-title">Calorimetry Comparison</div></div>
+      <div class="tbl-wrap"><table><thead><tr><th>Type</th><th>Conditions</th><th>Measures</th><th>Use case</th></tr></thead><tbody>
+        <tr><td>Coffee-cup calorimeter</td><td>Constant pressure, open</td><td>q_p ≈ ΔH</td><td>Aqueous reactions, neutralization</td></tr>
+        <tr><td>Bomb calorimeter</td><td>Constant volume, sealed</td><td>q_v = ΔE</td><td>Combustion reactions, foods</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(167,139,250,.12)">🗺️</div><div class="sec-title">Hess's Law</div></div>
+      <div class="steps">
+        <div class="step"><div class="step-n">1</div><div class="step-body"><h4>Write target reaction</h4><p>Identify what you're solving for.</p></div></div>
+        <div class="step"><div class="step-n">2</div><div class="step-body"><h4>Arrange given reactions</h4><p>Flip reactions as needed (flip sign of ΔH). Multiply as needed (scale ΔH by same factor).</p></div></div>
+        <div class="step"><div class="step-n">3</div><div class="step-body"><h4>Cancel intermediates</h4><p>Species that appear on both sides cancel. What remains should match target reaction.</p></div></div>
+        <div class="step"><div class="step-n">4</div><div class="step-body"><h4>Sum the ΔH values</h4><p>ΔH_total = sum of all modified ΔH values. Enthalpy is a state function — path doesn't matter.</p></div></div>
+      </div>
+    </div>
+    <div class="hbox hbox-blue"><h4>💡 Heating Curves</h4><ul>
+      <li>Sloped region: q = mcΔT (temperature changes, single phase)</li>
+      <li>Flat region (phase change): q = n × ΔH_fus or n × ΔH_vap (T constant, state changing)</li>
+      <li>Melting point: solid ⇌ liquid equilibrium. Boiling point: liquid ⇌ gas at 1 atm.</li>
+      <li>Specific heats differ by phase: water(s)=2.09, water(l)=4.18, water(g)=2.01 J/g·K</li>
+    </ul></div>
+    <div class="hbox hbox-amber"><h4>⚠ USNCO Tips</h4><ul>
+      <li>State function: ΔH depends only on initial and final state, not pathway</li>
+      <li>Endothermic: ΔH &gt; 0 (absorbs heat). Exothermic: ΔH &lt; 0 (releases heat)</li>
+      <li>Born-Haber cycle uses Hess's Law to find lattice energy indirectly</li>
+      <li>Bond energies are averages — less accurate than ΔH°f method</li>
+    </ul></div>`
+  },
+  {
+    id:6, title:"Solutions & Properties", emoji:"🧪",
+    topics:["Solubility rules","Concentration units","Dilutions","Colligative properties","Raoult's law","Solubility vs temperature"],
+    lead:"Solutions are everywhere in chemistry. Master concentration units, colligative properties, and the factors that govern how and how much substances dissolve.",
+    content:`
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(56,217,217,.12)">📏</div><div class="sec-title">Concentration Units</div></div>
+      <div class="tbl-wrap"><table><thead><tr><th>Unit</th><th>Symbol</th><th>Definition</th><th>Notes</th></tr></thead><tbody>
+        <tr><td>Molarity</td><td>M</td><td>mol solute / L solution</td><td>Most common; T-dependent</td></tr>
+        <tr><td>Molality</td><td>m</td><td>mol solute / kg solvent</td><td>T-independent; used for colligative props</td></tr>
+        <tr><td>Mass percent</td><td>%</td><td>(mass solute / mass soln) × 100</td><td>No molar mass needed</td></tr>
+        <tr><td>Mole fraction</td><td>χ</td><td>mol solute / mol total</td><td>Dimensionless; used in Raoult's law</td></tr>
+        <tr><td>ppm</td><td>ppm</td><td>mg solute / kg soln (≈ mg/L for water)</td><td>For very dilute solutions (trace analysis)</td></tr>
+        <tr><td>ppb</td><td>ppb</td><td>μg solute / kg soln</td><td>Environmental, trace contaminants</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(56,217,217,.12)">📐</div><div class="sec-title">Colligative Property Formulas</div></div>
+      <div class="formula-list">
+        <div class="formula-row"><div class="feq">ΔT_b = i · K_b · m</div><div class="fdesc"><strong>Boiling point elevation.</strong> K_b = 0.512°C·kg/mol for water. i = van't Hoff factor (particles per formula unit).</div></div>
+        <div class="formula-row"><div class="feq">ΔT_f = i · K_f · m</div><div class="fdesc"><strong>Freezing point depression.</strong> K_f = 1.86°C·kg/mol for water. T_f decreases; T_b increases.</div></div>
+        <div class="formula-row"><div class="feq">π = iMRT</div><div class="fdesc"><strong>Osmotic pressure.</strong> R = 0.08206 L·atm/mol·K. Osmosis: solvent moves toward higher solute concentration through semipermeable membrane.</div></div>
+        <div class="formula-row"><div class="feq">P_soln = χ_solvent · P°_solvent</div><div class="fdesc"><strong>Raoult's Law.</strong> Vapor pressure lowering. Addition of solute lowers vapor pressure proportionally. ΔP = χ_solute × P°.</div></div>
+      </div>
+    </div>
+    <div class="hbox hbox-green"><h4>✓ Van't Hoff Factor (i)</h4><ul>
+      <li>Nonelectrolytes (glucose, sugar): i = 1</li>
+      <li>NaCl: i = 2 (Na⁺ + Cl⁻)</li>
+      <li>MgCl₂: i = 3 (Mg²⁺ + 2Cl⁻)</li>
+      <li>K₂SO₄: i = 3 (2K⁺ + SO₄²⁻)</li>
+      <li>Actual i is slightly less than theoretical due to ion pairing in concentrated solutions</li>
+    </ul></div>
+    <div class="hbox hbox-cyan"><h4>🌡️ Solubility Trends</h4><ul>
+      <li>Most solid solutes: solubility increases with temperature (exothermic exceptions exist, e.g., CaSO₄)</li>
+      <li>Gases: solubility decreases with temperature (explains fish dying in warm water)</li>
+      <li>Gases: solubility increases with pressure — Henry's Law: C = k_H × P</li>
+      <li>"Like dissolves like": polar in polar, nonpolar in nonpolar</li>
+    </ul></div>
+    <div class="hbox hbox-amber"><h4>⚠ USNCO Tips</h4><ul>
+      <li>Colligative properties depend on number of particles, not identity — ideal for molar mass determination</li>
+      <li>Osmotic pressure is the most sensitive colligative property — used for polymers, biological solutions</li>
+      <li>Raoult's Law: ideal solution assumption — real solutions deviate (positive or negative)</li>
+      <li>To convert M to m: need density of solution (converts volume to mass of solvent)</li>
+    </ul></div>`
+  },
+  {
+    id:7, title:"Chemical Equilibrium", emoji:"⚖️",
+    topics:["Kc, Kp","Reaction quotient Q","ICE tables","Le Châtelier's principle","Ksp","Common ion effect","Coupled equilibria","Complex ion equilibria"],
+    lead:"Most reactions don't go to completion — they reach equilibrium. Master equilibrium expressions, ICE tables, Le Châtelier's principle, and solubility equilibria.",
+    content:`
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(52,211,153,.12)">⚖️</div><div class="sec-title">Equilibrium Expressions</div></div>
+      <div class="formula-list">
+        <div class="formula-row"><div class="feq">Kc = [C]^c[D]^d / [A]^a[B]^b</div><div class="fdesc"><strong>Equilibrium constant (concentration).</strong> For aA + bB ⇌ cC + dD. Pure solids and liquids are omitted. Kc is dimensionless.</div></div>
+        <div class="formula-row"><div class="feq">Kp = Kc(RT)^Δn</div><div class="fdesc"><strong>Pressure equilibrium constant.</strong> Δn = moles gas products − moles gas reactants. R = 0.08206 L·atm/mol·K.</div></div>
+        <div class="formula-row"><div class="feq">Q < K → forward | Q > K → reverse</div><div class="fdesc"><strong>Reaction quotient Q.</strong> Same expression as K, but uses current concentrations. Compare Q to K to predict shift direction.</div></div>
+        <div class="formula-row"><div class="feq">Ksp = [M^(m+)]^m [X^(n−)]^n</div><div class="fdesc"><strong>Solubility product.</strong> For M_mX_n(s) ⇌ mM^m+ + nX^n−. Solid not included. Ksp predicts precipitation.</div></div>
+        <div class="formula-row"><div class="feq">K_overall = K₁ × K₂ × K₃ …</div><div class="fdesc"><strong>Coupled equilibria.</strong> When reactions are added, their K values multiply. When reversed, K = 1/K original.</div></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(52,211,153,.12)">🧊</div><div class="sec-title">ICE Table Method</div></div>
+      <div class="steps">
+        <div class="step"><div class="step-n">I</div><div class="step-body"><h4>Initial concentrations</h4><p>Fill in starting concentrations (in M). If a species starts at 0, it's a product.</p></div></div>
+        <div class="step"><div class="step-n">C</div><div class="step-body"><h4>Change in concentration</h4><p>Express changes as ±x (or ±nx for stoichiometric coefficients). Reactants decrease, products increase.</p></div></div>
+        <div class="step"><div class="step-n">E</div><div class="step-body"><h4>Equilibrium expression</h4><p>Substitute (I + C) expressions into K expression. Solve for x. Check: if K is small (&lt;10⁻³), use small-x approximation.</p></div></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(167,139,250,.12)">🔄</div><div class="sec-title">Le Châtelier's Principle</div></div>
+      <div class="tbl-wrap"><table><thead><tr><th>Stress Applied</th><th>System Response</th><th>Effect on K</th></tr></thead><tbody>
+        <tr><td>Add reactant</td><td>Shift forward (→)</td><td>No change</td></tr>
+        <tr><td>Remove product</td><td>Shift forward (→)</td><td>No change</td></tr>
+        <tr><td>Increase pressure (decrease V)</td><td>Shift toward fewer moles of gas</td><td>No change</td></tr>
+        <tr><td>Increase temperature</td><td>Shift in endothermic direction</td><td>K changes</td></tr>
+        <tr><td>Add inert gas (constant V)</td><td>No shift</td><td>No change</td></tr>
+        <tr><td>Add catalyst</td><td>No shift (faster to equilibrium)</td><td>No change</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="hbox hbox-blue"><h4>💡 Common Ion Effect & Ksp</h4><ul>
+      <li>Adding a common ion shifts equilibrium to favor the solid (less dissolves)</li>
+      <li>Example: adding NaCl to AgCl solution decreases Ag⁺ solubility — Cl⁻ is the common ion</li>
+      <li>Precipitation test: if Q > Ksp, precipitation occurs; if Q &lt; Ksp, solution is unsaturated</li>
+      <li>Complex ion formation: M^n+ + ligands ⇌ complex. Large K_f means complex is very stable → increases apparent solubility of the solid</li>
+    </ul></div>
+    <div class="hbox hbox-amber"><h4>⚠ USNCO Tips</h4><ul>
+      <li>K has no units — always express concentrations in mol/L and pressures in atm (or bar)</li>
+      <li>Small K (&lt;10⁻³): "5% rule" — if x/[initial] &lt; 5%, small x approximation is valid</li>
+      <li>K &gt; 10³: reaction is essentially complete going forward; set up ICE assuming 100% completion then back-calculate</li>
+      <li>For USNCO: know how to manipulate equilibria algebraically and combine multiple K expressions</li>
+    </ul></div>`
+  },
+  {
+    id:8, title:"Acids & Bases", emoji:"🧫",
+    topics:["Strong vs weak acids/bases","Ka, Kb","pH, pOH","Polyprotic acids","Buffers","Henderson-Hasselbalch","Titration curves","Indicators","Acid-base stoichiometry"],
+    lead:"Master the chemistry of proton transfer — from strong vs. weak equilibria to buffer design, titration curves, and every type of acid-base reaction.",
+    content:`
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(248,113,113,.12)">🧫</div><div class="sec-title">Key Formulas</div></div>
+      <div class="formula-list">
+        <div class="formula-row"><div class="feq">pH = −log[H⁺]</div><div class="fdesc"><strong>pH definition.</strong> Also: pOH = −log[OH⁻]. At 25°C: pH + pOH = 14. [H⁺][OH⁻] = Kw = 1.0×10⁻¹⁴.</div></div>
+        <div class="formula-row"><div class="feq">Ka × Kb = Kw</div><div class="fdesc"><strong>Conjugate acid-base relationship.</strong> For any conjugate pair. pKa + pKb = 14. Stronger acid → weaker conjugate base.</div></div>
+        <div class="formula-row"><div class="feq">pH = pKa + log([A⁻]/[HA])</div><div class="fdesc"><strong>Henderson-Hasselbalch equation.</strong> For buffer solutions. Best buffering when pH ≈ pKa (ratio near 1:1). Buffer range: pKa ± 1.</div></div>
+        <div class="formula-row"><div class="feq">% dissociation = ([H⁺]/[HA]₀) × 100</div><div class="fdesc"><strong>Percent dissociation of weak acid.</strong> Increases as concentration decreases. Ka = α²C/(1−α) where α = fraction dissociated.</div></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(248,113,113,.12)">📋</div><div class="sec-title">Strong Acids & Bases (Memorize)</div></div>
+      <div class="card-grid">
+        <div class="card"><div class="card-icon">⚡</div><h3>6 Strong Acids</h3><p>HCl, HBr, HI, HNO₃, H₂SO₄ (1st proton), HClO₄. Fully dissociate in water. [H⁺] = initial [acid] concentration.</p></div>
+        <div class="card"><div class="card-icon">⚡</div><h3>Strong Bases</h3><p>Group 1 hydroxides (LiOH, NaOH, KOH, RbOH, CsOH) and heavy Group 2 (Ca(OH)₂, Sr(OH)₂, Ba(OH)₂). Fully dissociate.</p></div>
+        <div class="card"><div class="card-icon">🌊</div><h3>Weak Acids</h3><p>Partially dissociate: HA ⇌ H⁺ + A⁻. Ka = [H⁺][A⁻]/[HA]. Small Ka → barely dissociates → weaker acid. Use ICE table to find [H⁺].</p></div>
+        <div class="card"><div class="card-icon">🌊</div><h3>Weak Bases</h3><p>B + H₂O ⇌ BH⁺ + OH⁻. Kb = [BH⁺][OH⁻]/[B]. Find [OH⁻], then pOH, then pH = 14 − pOH.</p></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(167,139,250,.12)">📈</div><div class="sec-title">Titration Curve Key Points</div></div>
+      <div class="tbl-wrap"><table><thead><tr><th>Titration Type</th><th>At Equivalence Point</th><th>pH at Eq. Pt.</th><th>Buffer Region</th></tr></thead><tbody>
+        <tr><td>Strong acid + Strong base</td><td>Salt of neutral ions</td><td>= 7.00</td><td>None</td></tr>
+        <tr><td>Weak acid + Strong base</td><td>Salt of weak acid (hydrolyzes)</td><td>&gt; 7.00</td><td>Yes, pKa ≈ pH at half-equivalence</td></tr>
+        <tr><td>Strong acid + Weak base</td><td>Salt of weak base (hydrolyzes)</td><td>&lt; 7.00</td><td>Yes, pKb region</td></tr>
+        <tr><td>Weak acid + Weak base</td><td>Depends on relative Ka/Kb</td><td>Variable</td><td>Yes, complex</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="hbox hbox-purple"><h4>🧪 Polyprotic Acids</h4><ul>
+      <li>H₂SO₄: Ka₁ = ∞ (strong), Ka₂ = 0.012 (weak). First proton fully lost.</li>
+      <li>H₂CO₃: Ka₁ = 4.3×10⁻⁷, Ka₂ = 4.7×10⁻¹¹</li>
+      <li>H₃PO₄: Ka₁ ≫ Ka₂ ≫ Ka₃ — treat as monoprotic for first approximation</li>
+      <li>Each successive Ka is much smaller — second/third ionization negligible in most cases</li>
+    </ul></div>
+    <div class="hbox hbox-blue"><h4>💡 Buffer Design</h4><ul>
+      <li>Choose acid with pKa within ±1 of desired pH</li>
+      <li>Buffer capacity is highest when [A⁻]/[HA] = 1 (i.e., pH = pKa)</li>
+      <li>More concentrated buffer → higher capacity (resists pH change better)</li>
+      <li>Adding strong acid to buffer: H⁺ + A⁻ → HA (recalculate ratio)</li>
+      <li>Adding strong base to buffer: OH⁻ + HA → A⁻ + H₂O (recalculate ratio)</li>
+    </ul></div>
+    <div class="hbox hbox-amber"><h4>⚠ USNCO Tips</h4><ul>
+      <li>Salt hydrolysis: A⁻ (conjugate base of weak acid) + H₂O → HA + OH⁻ → basic solution</li>
+      <li>At half-equivalence point of weak acid titration: pH = pKa (use for Ka determination)</li>
+      <li>Indicators: choose one whose pKa ≈ pH at equivalence point</li>
+      <li>Lewis acid = electron pair acceptor; Lewis base = electron pair donor (broader than Brønsted)</li>
+    </ul></div>`
+  },
+  {
+    id:9, title:"Thermodynamics", emoji:"♨️",
+    topics:["Entropy (ΔS)","Gibbs free energy (ΔG)","ΔG = ΔH − TΔS","Spontaneity","Standard free energies","Coupled reactions","ΔG° and K relationship"],
+    lead:"Predict whether reactions will occur spontaneously. Understand entropy, Gibbs free energy, and the deep connection between thermodynamics and equilibrium.",
+    content:`
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(251,191,36,.12)">♨️</div><div class="sec-title">Key Formulas</div></div>
+      <div class="formula-list">
+        <div class="formula-row"><div class="feq">ΔG = ΔH − TΔS</div><div class="fdesc"><strong>Gibbs free energy.</strong> T in Kelvin. ΔG &lt; 0 → spontaneous. ΔG = 0 → equilibrium. ΔG &gt; 0 → nonspontaneous as written.</div></div>
+        <div class="formula-row"><div class="feq">ΔG° = −RT ln K</div><div class="fdesc"><strong>Connects thermodynamics and equilibrium.</strong> ΔG° &lt; 0 → K &gt; 1 (products favored at equilibrium). R = 8.314 J/mol·K.</div></div>
+        <div class="formula-row"><div class="feq">ΔG = ΔG° + RT ln Q</div><div class="fdesc"><strong>Gibbs free energy under non-standard conditions.</strong> When Q = K, ΔG = 0 (system at equilibrium).</div></div>
+        <div class="formula-row"><div class="feq">ΔS°_rxn = Σ S°(products) − Σ S°(reactants)</div><div class="fdesc"><strong>Standard entropy change.</strong> Unlike ΔH°f, S° of elements ≠ 0. Use tabulated S° values.</div></div>
+        <div class="formula-row"><div class="feq">ΔG° = Σ ΔG°f(products) − Σ ΔG°f(reactants)</div><div class="fdesc"><strong>From standard Gibbs energies of formation.</strong> ΔG°f of elements in standard state = 0.</div></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(251,191,36,.12)">📊</div><div class="sec-title">Spontaneity Summary</div></div>
+      <div class="tbl-wrap"><table><thead><tr><th>ΔH</th><th>ΔS</th><th>Spontaneous?</th><th>When?</th></tr></thead><tbody>
+        <tr><td>− (exothermic)</td><td>+ (increases)</td><td>Always (ΔG always −)</td><td>All temperatures</td></tr>
+        <tr><td>+ (endothermic)</td><td>− (decreases)</td><td>Never (ΔG always +)</td><td>Never spontaneous</td></tr>
+        <tr><td>− (exothermic)</td><td>− (decreases)</td><td>At low T</td><td>ΔH dominates when T small</td></tr>
+        <tr><td>+ (endothermic)</td><td>+ (increases)</td><td>At high T</td><td>TΔS dominates when T large</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="hbox hbox-green"><h4>✓ Entropy Trends</h4><ul>
+      <li>ΔS &gt; 0: more moles of gas produced, solid → liquid → gas, dissolving most ionic solids, heating</li>
+      <li>ΔS &lt; 0: fewer moles of gas, gas → liquid/solid, forming a precipitate, cooling</li>
+      <li>Third Law: S° = 0 for perfect crystal at 0 K. All real substances have S° &gt; 0 at 298 K</li>
+      <li>More complex molecules have higher S° (more microstates)</li>
+    </ul></div>
+    <div class="hbox hbox-purple"><h4>🔗 Coupled Reactions</h4><ul>
+      <li>Thermodynamically unfavorable reaction (ΔG &gt; 0) can be driven by coupling with favorable one (ΔG &lt; 0)</li>
+      <li>If ΔG_total = ΔG₁ + ΔG₂ &lt; 0, the coupled process is spontaneous</li>
+      <li>Biological example: ATP hydrolysis (ΔG = −30 kJ/mol) drives biosynthesis</li>
+      <li>USNCO may combine K expressions: K_total = K₁ × K₂ (equivalent to adding ΔG° values)</li>
+    </ul></div>
+    <div class="hbox hbox-amber"><h4>⚠ USNCO Tips</h4><ul>
+      <li>ΔG° ≠ ΔG: standard state is 1 M concentrations, 1 atm pressures, 25°C</li>
+      <li>T at which reaction switches spontaneity: set ΔG = 0 → T = ΔH/ΔS (watch signs!)</li>
+      <li>Large K → very negative ΔG° → strongly product-favored at equilibrium</li>
+      <li>Don't confuse thermodynamic spontaneity with kinetic rate — spontaneous can still be slow</li>
+    </ul></div>`
+  },
+  {
+    id:10, title:"Kinetics", emoji:"⚡",
+    topics:["Rate laws","Reaction order","Method of initial rates","Integrated rate laws","Half-life","Arrhenius equation","Reaction mechanisms","Rate-determining step","Steady-state approximation"],
+    lead:"How fast do reactions go, and why? From rate laws and mechanisms to temperature dependence and the Arrhenius equation — kinetics explains the speed of chemistry.",
+    content:`
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(251,191,36,.12)">⚡</div><div class="sec-title">Key Formulas</div></div>
+      <div class="formula-list">
+        <div class="formula-row"><div class="feq">rate = k[A]^m[B]^n</div><div class="fdesc"><strong>Rate law.</strong> m and n determined experimentally (NOT from balanced equation). Overall order = m + n. k = rate constant (T-dependent).</div></div>
+        <div class="formula-row"><div class="feq">k = Ae^(−Ea/RT)</div><div class="fdesc"><strong>Arrhenius equation.</strong> A = frequency factor, Ea = activation energy. Higher T or lower Ea → larger k → faster reaction.</div></div>
+        <div class="formula-row"><div class="feq">ln(k₂/k₁) = (Ea/R)(1/T₁ − 1/T₂)</div><div class="fdesc"><strong>Two-temperature Arrhenius.</strong> Useful when you need Ea or k at a new temperature from two data points.</div></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(251,191,36,.12)">📊</div><div class="sec-title">Integrated Rate Laws</div></div>
+      <div class="tbl-wrap"><table><thead><tr><th>Order</th><th>Integrated Law</th><th>Linear Plot</th><th>Half-life</th></tr></thead><tbody>
+        <tr><td>0th order</td><td>[A] = [A]₀ − kt</td><td>[A] vs t (slope = −k)</td><td>t½ = [A]₀/2k</td></tr>
+        <tr><td>1st order</td><td>ln[A] = ln[A]₀ − kt</td><td>ln[A] vs t (slope = −k)</td><td>t½ = 0.693/k (constant!)</td></tr>
+        <tr><td>2nd order</td><td>1/[A] = 1/[A]₀ + kt</td><td>1/[A] vs t (slope = +k)</td><td>t½ = 1/(k[A]₀)</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(167,139,250,.12)">🔬</div><div class="sec-title">Reaction Mechanisms</div></div>
+      <div class="steps">
+        <div class="step"><div class="step-n">1</div><div class="step-body"><h4>Elementary steps must add to overall reaction</h4><p>Intermediates (produced then consumed) cancel out. Catalysts appear in mechanism but not overall equation.</p></div></div>
+        <div class="step"><div class="step-n">2</div><div class="step-body"><h4>Rate-determining step (RDS)</h4><p>The slowest step determines the overall rate law. Rate law comes directly from the RDS stoichiometry (for elementary steps only).</p></div></div>
+        <div class="step"><div class="step-n">3</div><div class="step-body"><h4>Pre-equilibrium approximation</h4><p>If a fast equilibrium precedes the RDS, use K_eq to substitute intermediate concentration in rate law.</p></div></div>
+        <div class="step"><div class="step-n">4</div><div class="step-body"><h4>Steady-state approximation</h4><p>Assume d[intermediate]/dt ≈ 0. Rate of formation = rate of consumption. Solve algebraically for intermediate concentration.</p></div></div>
+      </div>
+    </div>
+    <div class="hbox hbox-blue"><h4>💡 Catalysis</h4><ul>
+      <li>Catalyst lowers activation energy (Ea) — provides alternative pathway</li>
+      <li>Not consumed overall — appears in mechanism but cancels</li>
+      <li>Homogeneous: same phase as reactants. Heterogeneous: different phase (e.g., Pt surface)</li>
+      <li>Enzyme catalysis: lock-and-key or induced-fit model. Substrate binds active site.</li>
+      <li>Does NOT change ΔG, ΔH, or equilibrium position — only rate</li>
+    </ul></div>
+    <div class="hbox hbox-amber"><h4>⚠ USNCO Tips</h4><ul>
+      <li>Method of initial rates: double [A] while holding [B] constant → if rate doubles, first order in A; if quadruples, second order</li>
+      <li>Molecularity (unimolecular, bimolecular) applies only to elementary steps</li>
+      <li>1st order half-life is CONSTANT — radioactive decay is always 1st order</li>
+      <li>Steady-state is harder than pre-equilibrium — USNCO may test algebraic derivation</li>
+    </ul></div>`
+  },
+  {
+    id:11, title:"Electrochemistry", emoji:"🔋",
+    topics:["Oxidation/reduction","Galvanic cells","Electrolytic cells","Standard reduction potentials","Cell notation","Nernst equation","Concentration cells","Faraday's laws"],
+    lead:"Electron transfer drives both batteries and electrolysis. Master cell potentials, the Nernst equation, electrolysis calculations, and how electrochemistry connects to thermodynamics.",
+    content:`
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(79,142,247,.12)">🔋</div><div class="sec-title">Key Formulas</div></div>
+      <div class="formula-list">
+        <div class="formula-row"><div class="feq">E°cell = E°cathode − E°anode</div><div class="fdesc"><strong>Standard cell potential.</strong> Positive E°cell → spontaneous reaction (galvanic cell). Cathode = reduction (higher E°). Anode = oxidation (lower E°).</div></div>
+        <div class="formula-row"><div class="feq">ΔG° = −nFE°cell</div><div class="fdesc"><strong>Connects electrochemistry and thermodynamics.</strong> n = moles of electrons transferred, F = 96485 C/mol. Spontaneous: ΔG° &lt; 0 ⟺ E°cell &gt; 0.</div></div>
+        <div class="formula-row"><div class="feq">E = E° − (RT/nF)ln Q</div><div class="fdesc"><strong>Nernst equation.</strong> At 25°C: E = E° − (0.0592/n)log Q. Cell potential varies with concentration.</div></div>
+        <div class="formula-row"><div class="feq">ΔG° = −RT ln K</div><div class="fdesc"><strong>Link to equilibrium:</strong> E°cell = (RT/nF)ln K = (0.0592/n)log K at 25°C.</div></div>
+        <div class="formula-row"><div class="feq">m = (I × t × M) / (n × F)</div><div class="fdesc"><strong>Faraday's Law of electrolysis.</strong> m = mass deposited (g), I = current (A), t = time (s), M = molar mass, n = electrons per ion.</div></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(79,142,247,.12)">⚡</div><div class="sec-title">Cell Types Compared</div></div>
+      <div class="tbl-wrap"><table><thead><tr><th>Feature</th><th>Galvanic (Voltaic) Cell</th><th>Electrolytic Cell</th></tr></thead><tbody>
+        <tr><td>Energy</td><td>Produces electrical energy (spontaneous)</td><td>Consumes electrical energy (nonspontaneous)</td></tr>
+        <tr><td>ΔG°</td><td>&lt; 0</td><td>&gt; 0</td></tr>
+        <tr><td>E°cell</td><td>&gt; 0</td><td>&lt; 0 (applied voltage needed)</td></tr>
+        <tr><td>Anode</td><td>Negative electrode (oxidation)</td><td>Positive electrode (oxidation)</td></tr>
+        <tr><td>Cathode</td><td>Positive electrode (reduction)</td><td>Negative electrode (reduction)</td></tr>
+        <tr><td>Salt bridge</td><td>Required</td><td>Not required (one solution)</td></tr>
+        <tr><td>Examples</td><td>Batteries, fuel cells</td><td>Electroplating, electrolysis of water</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="hbox hbox-cyan"><h4>🔌 Cell Notation</h4><ul>
+      <li>Format: Anode | anode solution || cathode solution | cathode</li>
+      <li>Example: Zn(s) | Zn²⁺(aq) || Cu²⁺(aq) | Cu(s)</li>
+      <li>Single line | = phase boundary. Double line || = salt bridge</li>
+      <li>If electrode is inert (Pt), include it: Pt(s) | H₂(g) | H⁺(aq)</li>
+    </ul></div>
+    <div class="hbox hbox-blue"><h4>💡 Concentration Cells</h4><ul>
+      <li>Both half-cells use same metal/ion but at different concentrations</li>
+      <li>E° = 0 (same chemistry), but E ≠ 0 due to concentration difference</li>
+      <li>Higher concentration side = cathode (reduction). Dilute side = anode.</li>
+      <li>E = −(0.0592/n) × log([dilute]/[concentrated])</li>
+      <li>Cell drives toward equalizing concentrations (Nernst equation, Q → K)</li>
+    </ul></div>
+    <div class="hbox hbox-amber"><h4>⚠ USNCO Tips</h4><ul>
+      <li>DO NOT flip reduction potential when writing oxidation half-reaction — only flip sign when calculating E°cell</li>
+      <li>Standard reduction potentials are intensive — don't multiply by stoichiometric coefficient</li>
+      <li>Faraday: 1 mol e⁻ = 96485 C. Charge = current × time (C = A × s)</li>
+      <li>Electrolysis order of reduction at cathode: most positive E° reduced first</li>
+    </ul></div>`
+  },
+  {
+    id:12, title:"Inorganic Chemistry", emoji:"🔩",
+    topics:["Coordination compounds","Ligands","Coordination number","Geometries","Crystal field theory","High/low spin","Spectrochemical series","Transition metals","Descriptive chemistry","Lewis & HSAB acid-base"],
+    lead:"The chemistry of coordination complexes, transition metals, and the descriptive periodic trends that explain why Group 1 metals behave so differently from the d-block.",
+    content:`
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(167,139,250,.12)">🔩</div><div class="sec-title">Coordination Chemistry</div></div>
+      <div class="card-grid">
+        <div class="card"><div class="card-icon">🔗</div><h3>Coordination Compounds</h3><p>Metal center bonded to ligands (Lewis bases). Written as [ML_n]^charge. Metal is Lewis acid, ligands are Lewis bases. IUPAC naming: ligands alphabetically, then metal with oxidation state.</p></div>
+        <div class="card"><div class="card-icon">🦷</div><h3>Ligand Types</h3><p>Monodentate: 1 donor atom (NH₃, Cl⁻, H₂O, CN⁻). Bidentate: 2 donor atoms (en = ethylenediamine, ox²⁻). Polydentate: EDTA⁴⁻ (6 donors). More donor atoms = higher stability (chelate effect).</p></div>
+        <div class="card"><div class="card-icon">📐</div><h3>Common Geometries</h3><p>CN = 6: octahedral (most common). CN = 4: tetrahedral or square planar. CN = 2: linear (Ag⁺, Au⁺ complexes). CN = 5: trigonal bipyramidal or square pyramidal.</p></div>
+        <div class="card"><div class="card-icon">💎</div><h3>Crystal Field Theory</h3><p>d orbitals split in an electric field from ligands. Octahedral: dxy, dxz, dyz (t₂g) are lower energy; dx²-y², dz² (eg) higher energy. CFSE = crystal field stabilization energy.</p></div>
+        <div class="card"><div class="card-icon">🌀</div><h3>High-Spin vs Low-Spin</h3><p>Depends on Δo (crystal field splitting) vs pairing energy (P). Strong field ligands (large Δo) → low-spin (pair up). Weak field ligands (small Δo) → high-spin (fill all before pairing).</p></div>
+        <div class="card"><div class="card-icon">🌈</div><h3>Color in Complexes</h3><p>Absorbed wavelength ↔ color observed (complementary). d-d transitions absorb visible light. Stronger field ligands → larger Δo → absorb shorter wavelength (blue/UV) → appear orange/red.</p></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(167,139,250,.12)">📋</div><div class="sec-title">Spectrochemical Series (Weak → Strong Field)</div></div>
+      <div class="hbox hbox-purple"><h4>Field Strength Order</h4><p>I⁻ &lt; Br⁻ &lt; Cl⁻ &lt; F⁻ &lt; OH⁻ &lt; H₂O &lt; NH₃ &lt; en &lt; NO₂⁻ &lt; CN⁻ &lt; CO</p><p style="margin-top:8px">Weak-field ligands (I⁻, Br⁻, Cl⁻): tend to give high-spin complexes. Strong-field (CN⁻, CO): give low-spin, high CFSE, intensely colored complexes.</p></div>
+    </div>
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(79,142,247,.12)">🧱</div><div class="sec-title">Acid-Base Theories</div></div>
+      <div class="tbl-wrap"><table><thead><tr><th>Theory</th><th>Acid</th><th>Base</th><th>Scope</th></tr></thead><tbody>
+        <tr><td>Arrhenius</td><td>Produces H⁺ in water</td><td>Produces OH⁻ in water</td><td>Aqueous only</td></tr>
+        <tr><td>Brønsted-Lowry</td><td>Proton donor (H⁺)</td><td>Proton acceptor</td><td>Protic solvents</td></tr>
+        <tr><td>Lewis</td><td>Electron pair acceptor</td><td>Electron pair donor</td><td>Broadest — includes all coordination chemistry</td></tr>
+        <tr><td>HSAB</td><td>Hard (small, high charge) or Soft (large, polarizable)</td><td>Hard or Soft</td><td>Predicts complex stability</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="hbox hbox-amber"><h4>⚠ USNCO Tips</h4><ul>
+      <li>Chelate effect: multidentate ligands form more stable complexes due to entropy advantage (more particles released)</li>
+      <li>Trans effect: in square planar complexes, certain ligands labilize the trans position — important in Pt chemistry</li>
+      <li>HSAB: hard acids prefer hard bases; soft acids prefer soft bases. Hard = small/high charge; soft = large/polarizable</li>
+      <li>Fe²⁺ (d⁶) can be high or low spin depending on ligand — Fe(CN)₆⁴⁻ is low spin (strong CN⁻), Fe(H₂O)₆²⁺ is high spin</li>
+    </ul></div>`
+  },
+  {
+    id:13, title:"Organic Chemistry", emoji:"🧬",
+    topics:["Hybridization & structure","Functional groups","Resonance","Isomerism","Chirality (R/S)","SN1, SN2, E1, E2","Addition reactions","Oxidation/reduction","Polymerization"],
+    lead:"Carbon chemistry — from functional groups and stereochemistry to substitution, elimination, and addition reactions. Understand structure determines reactivity.",
+    content:`
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(52,211,153,.12)">🧬</div><div class="sec-title">Functional Groups (Key Ones)</div></div>
+      <div class="tbl-wrap"><table><thead><tr><th>Group</th><th>Structure</th><th>Class</th><th>Key Property</th></tr></thead><tbody>
+        <tr><td>Alkane</td><td>C–C, C–H only</td><td>Hydrocarbon</td><td>Relatively unreactive; combustion</td></tr>
+        <tr><td>Alkene</td><td>C=C</td><td>Unsaturated HC</td><td>Electrophilic addition reactions</td></tr>
+        <tr><td>Alkyne</td><td>C≡C</td><td>Unsaturated HC</td><td>More reactive than alkenes</td></tr>
+        <tr><td>Alcohol</td><td>–OH</td><td>ROH</td><td>H-bonding, nucleophile, oxidizable</td></tr>
+        <tr><td>Aldehyde</td><td>–CHO</td><td>Carbonyl</td><td>Oxidizable to carboxylic acid</td></tr>
+        <tr><td>Ketone</td><td>C=O (internal)</td><td>Carbonyl</td><td>Not easily oxidized</td></tr>
+        <tr><td>Carboxylic acid</td><td>–COOH</td><td>Acid</td><td>Weak acid, H-bonding</td></tr>
+        <tr><td>Amine</td><td>–NH₂</td><td>Base</td><td>Weak base, H-bonding</td></tr>
+        <tr><td>Ester</td><td>–COOR</td><td>Carbonyl</td><td>From acid + alcohol (esterification)</td></tr>
+        <tr><td>Amide</td><td>–CONR₂</td><td>Carbonyl</td><td>Peptide bond; very stable</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(52,211,153,.12)">🔄</div><div class="sec-title">Substitution & Elimination Reactions</div></div>
+      <div class="tbl-wrap"><table><thead><tr><th>Reaction</th><th>Mechanism</th><th>Substrate</th><th>Nucleophile/Base</th><th>Conditions</th></tr></thead><tbody>
+        <tr><td>SN2</td><td>Concerted backside attack</td><td>Primary (best), secondary</td><td>Strong nucleophile</td><td>Inversion of config; polar aprotic solvent</td></tr>
+        <tr><td>SN1</td><td>Two-step, carbocation intermediate</td><td>Tertiary (best), secondary</td><td>Weak nucleophile</td><td>Racemization; polar protic solvent</td></tr>
+        <tr><td>E2</td><td>Concerted, anti-periplanar</td><td>Secondary, tertiary</td><td>Strong bulky base</td><td>Zaitsev's rule (more substituted alkene)</td></tr>
+        <tr><td>E1</td><td>Two-step, carbocation</td><td>Tertiary</td><td>Weak base</td><td>Zaitsev product; competes with SN1</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="hbox hbox-blue"><h4>💡 Chirality & Stereoisomers</h4><ul>
+      <li>Chiral center: carbon bonded to 4 different groups</li>
+      <li>R/S designation: arrange groups by CIP priority (highest to lowest) — clockwise = R, counterclockwise = S</li>
+      <li>Enantiomers: mirror images, non-superimposable. Identical physical properties except optical rotation</li>
+      <li>Diastereomers: non-mirror stereoisomers. Different physical properties</li>
+      <li>Meso compound: has chiral centers but internal mirror plane → achiral overall</li>
+    </ul></div>
+    <div class="hbox hbox-green"><h4>✓ Oxidation States in Organic Chemistry</h4><ul>
+      <li>Primary alcohol → aldehyde → carboxylic acid (oxidation)</li>
+      <li>Secondary alcohol → ketone (oxidation) · ketone is not easily oxidized further</li>
+      <li>Alkene → alkane (reduction, via hydrogenation with H₂/Pt or H₂/Pd)</li>
+      <li>Oxidizing agents: KMnO₄ (strong), CrO₃, PCC (mild, stops at aldehyde)</li>
+    </ul></div>
+    <div class="hbox hbox-purple"><h4>🧪 Polymerization Basics</h4><ul>
+      <li>Addition polymerization: monomers with C=C open and link (polyethylene, PVC, polystyrene)</li>
+      <li>Condensation polymerization: monomers react with loss of small molecule (H₂O) — nylon (amide bonds), polyester (ester bonds)</li>
+      <li>Degree of polymerization: number of repeat units. MW = n × MW of monomer</li>
+    </ul></div>
+    <div class="hbox hbox-amber"><h4>⚠ USNCO Tips</h4><ul>
+      <li>SN2 = strong nucleophile + primary substrate + polar aprotic (DMF, acetone, DMSO)</li>
+      <li>SN1 = weak nucleophile/nucleophilic solvent + tertiary + polar protic (water, alcohols)</li>
+      <li>Carbocation stability: tertiary &gt; secondary &gt; primary &gt; methyl (more alkyl groups = more hyperconjugation)</li>
+      <li>Markovnikov's rule: in addition to alkene, H adds to carbon with more H's (forms more stable carbocation)</li>
+    </ul></div>`
+  },
+  {
+    id:14, title:"Analytical Chemistry", emoji:"🔭",
+    topics:["Acid-base titrations","Redox titrations","Back titrations","Gravimetric analysis","Beer-Lambert law","UV-Vis spectroscopy","IR spectroscopy"],
+    lead:"The tools of measurement — quantitative and qualitative analysis through titrations, gravimetry, and spectroscopy. Understand how chemists actually determine what's in a sample.",
+    content:`
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(56,217,217,.12)">🔭</div><div class="sec-title">Spectroscopy</div></div>
+      <div class="formula-list">
+        <div class="formula-row"><div class="feq">A = εlc</div><div class="fdesc"><strong>Beer-Lambert Law.</strong> A = absorbance (dimensionless), ε = molar absorptivity (L/mol·cm), l = path length (cm), c = concentration (mol/L). A is log(I₀/I).</div></div>
+        <div class="formula-row"><div class="feq">%T = (I/I₀) × 100</div><div class="fdesc"><strong>Percent transmittance.</strong> A = 2 − log(%T). At A = 0: no absorption, %T = 100%. At A = 1: 10% of light transmitted.</div></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(56,217,217,.12)">📋</div><div class="sec-title">Spectroscopy Summary</div></div>
+      <div class="tbl-wrap"><table><thead><tr><th>Technique</th><th>Region</th><th>What It Detects</th><th>USNCO Relevance</th></tr></thead><tbody>
+        <tr><td>UV-Vis</td><td>200–800 nm</td><td>Electronic transitions, conjugation, d-d transitions</td><td>Beer-Lambert, concentration determination, complex colors</td></tr>
+        <tr><td>IR Spectroscopy</td><td>400–4000 cm⁻¹</td><td>Molecular vibrations, bond stretching/bending</td><td>Identify functional groups: O-H broad ~3300, C=O sharp ~1700, N-H ~3300</td></tr>
+        <tr><td>Mass Spectrometry</td><td>—</td><td>Mass-to-charge ratio of fragments</td><td>Molecular weight, isotope patterns, fragmentation</td></tr>
+        <tr><td>NMR</td><td>Radio waves</td><td>Nuclear spin environments</td><td>Structure elucidation (¹H NMR basics)</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(52,211,153,.12)">⚗️</div><div class="sec-title">Titration Methods</div></div>
+      <div class="card-grid">
+        <div class="card"><div class="card-icon">🧪</div><h3>Direct Titration</h3><p>Titrant added directly to analyte until equivalence point. At eq. pt: moles acid = moles base (×stoichiometry). Example: HCl titrated with NaOH.</p></div>
+        <div class="card"><div class="card-icon">↩️</div><h3>Back Titration</h3><p>Add excess known reagent to analyte, then titrate the excess with a second titrant. Used when analyte is volatile, insoluble, or reacts slowly. Example: excess NaOH + CaCO₃ → titrate remaining NaOH with HCl.</p></div>
+        <div class="card"><div class="card-icon">⚡</div><h3>Redox Titration</h3><p>Based on electron transfer. Example: permanganate (KMnO₄) titrations — self-indicating (purple → colorless). Requires understanding of oxidation states and balancing redox equations.</p></div>
+        <div class="card"><div class="card-icon">⬇️</div><h3>Gravimetric Analysis</h3><p>Analyte precipitated as insoluble compound, filtered, dried, and weighed. Accuracy depends on complete precipitation and pure, dry precipitate. Example: Ba²⁺ as BaSO₄.</p></div>
+      </div>
+    </div>
+    <div class="hbox hbox-cyan"><h4>📊 Beer-Lambert in Practice</h4><ul>
+      <li>A linear relationship between A and c only holds at moderate concentrations</li>
+      <li>Calibration curve: plot A vs c for known standards → use to find unknown c</li>
+      <li>Wavelength of maximum absorbance (λ_max) gives highest sensitivity</li>
+      <li>Complementary colors: if solution appears blue, it absorbs orange/red light (~600–700 nm)</li>
+    </ul></div>
+    <div class="hbox hbox-amber"><h4>⚠ USNCO Tips</h4><ul>
+      <li>At equivalence point: moles titrant × molarity = moles analyte × stoichiometry factor</li>
+      <li>IR: broad O-H stretch ~3200–3500 cm⁻¹ is most distinctive; C=O at ~1710–1720 cm⁻¹ identifies carbonyls</li>
+      <li>Gravimetric: know common precipitates (AgCl, BaSO₄, CaC₂O₄) and conditions for precipitation</li>
+      <li>Beer-Lambert fails at high concentrations (solute-solute interactions) and with fluorescent samples</li>
+    </ul></div>`
+  },
+  {
+    id:15, title:"Laboratory Chemistry", emoji:"🥼",
+    topics:["Reading burets","Titration curves","Significant figures","Error analysis","Percent error","Experimental design","Calorimetry","Distillation","Spectrophotometry"],
+    lead:"The practical side of chemistry — techniques, measurements, error analysis, and experimental design. These skills appear throughout USNCO in both labs and data interpretation.",
+    content:`
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(52,211,153,.12)">📏</div><div class="sec-title">Significant Figures</div></div>
+      <div class="card-grid">
+        <div class="card"><div class="card-icon">🔢</div><h3>Sig Fig Rules</h3><p>All non-zero digits are significant. Zeros between sig figs are significant. Leading zeros (0.002) are NOT. Trailing zeros after decimal ARE (2.50). Trailing zeros without decimal are ambiguous (use scientific notation).</p></div>
+        <div class="card"><div class="card-icon">✖️</div><h3>Multiplication/Division</h3><p>Answer has the same number of sig figs as the measurement with the fewest sig figs. Example: 4.52 × 3.1 = 14 (2 sig figs).</p></div>
+        <div class="card"><div class="card-icon">➕</div><h3>Addition/Subtraction</h3><p>Answer has the same number of decimal places as the measurement with the fewest decimal places. Example: 12.11 + 18.0 = 30.1 (1 decimal place).</p></div>
+        <div class="card"><div class="card-icon">📊</div><h3>Reading Equipment</h3><p>Estimate one digit beyond the smallest graduation. Buret: read to 0.01 mL. Thermometer: read to 0.1°C. Analytical balance: read to 0.0001 g (4 decimal places).</p></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(52,211,153,.12)">🎯</div><div class="sec-title">Error Analysis</div></div>
+      <div class="formula-list">
+        <div class="formula-row"><div class="feq">% error = |exp − true| / true × 100</div><div class="fdesc"><strong>Percent error.</strong> Measures accuracy (closeness to true value). Always positive (use absolute value).</div></div>
+        <div class="formula-row"><div class="feq">% RSD = (std dev / mean) × 100</div><div class="fdesc"><strong>Relative standard deviation (% RSD).</strong> Measures precision (reproducibility). Lower = more precise.</div></div>
+      </div>
+      <div class="tbl-wrap" style="margin-top:16px"><table><thead><tr><th>Error Type</th><th>Definition</th><th>Effect</th><th>Can be corrected?</th></tr></thead><tbody>
+        <tr><td>Systematic error</td><td>Consistent bias in one direction</td><td>Affects accuracy</td><td>Yes, by calibration or method correction</td></tr>
+        <tr><td>Random error</td><td>Random fluctuations around true value</td><td>Affects precision</td><td>Minimized by averaging; never fully eliminated</td></tr>
+        <tr><td>Gross error</td><td>Blunder (wrong reading, contamination)</td><td>Large deviation</td><td>Yes, by repeating and discarding outlier</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="section">
+      <div class="sec-hdr"><div class="sec-icon" style="background:rgba(56,217,217,.12)">🧪</div><div class="sec-title">Key Lab Techniques</div></div>
+      <div class="card-grid">
+        <div class="card"><div class="card-icon">🫧</div><h3>Buret Reading</h3><p>Read from top (0) to bottom (50 mL). Volume dispensed = final − initial reading. Read bottom of meniscus for clear liquids, top for dark (e.g., KMnO₄). Estimate to ±0.01 mL.</p></div>
+        <div class="card"><div class="card-icon">🌡️</div><h3>Calorimetry</h3><p>Minimize heat loss (styrofoam cup, lid). Record initial T before mixing. Record final T (maximum or plateau). Assume density of dilute solutions = 1.00 g/mL. q = mcΔT where m = mass of solution.</p></div>
+        <div class="card"><div class="card-icon">💧</div><h3>Distillation</h3><p>Separates liquids by boiling point. Simple distillation: &gt;25°C bp difference. Fractional: close boiling points, uses fractionating column. Collect fractions by temperature ranges.</p></div>
+        <div class="card"><div class="card-icon">📡</div><h3>Spectrophotometry</h3><p>Zero instrument with blank (solvent only). Measure A at λ_max. Use calibration curve (A vs c) for concentration. Higher concentration → higher absorbance (Beer-Lambert).</p></div>
+      </div>
+    </div>
+    <div class="hbox hbox-blue"><h4>💡 Good Experimental Design</h4><ul>
+      <li>Control variables: change only one independent variable at a time</li>
+      <li>Repeat trials: 3+ measurements to assess precision and spot gross errors</li>
+      <li>Blank/control: includes all reagents except analyte — corrects for background signal</li>
+      <li>Calibration standards: known concentrations/amounts run alongside unknowns</li>
+      <li>Random sampling: ensures representative sample of heterogeneous materials</li>
+    </ul></div>
+    <div class="hbox hbox-amber"><h4>⚠ USNCO Lab Tips</h4><ul>
+      <li>Buret: always check for air bubbles before titrating; rinse with titrant solution, not water</li>
+      <li>Volumetric glassware (pipet, buret, volumetric flask) is more precise than graduated cylinder</li>
+      <li>Overshooting equivalence point: systematic error, makes volume dispensed too large</li>
+      <li>If asked for sources of error — identify specific, realistic errors that affect result in a specific direction</li>
+      <li>Filtration: filter paper, Buchner funnel + vacuum for faster; wash precipitate with cold solvent to reduce solubility losses</li>
+    </ul></div>`
+  }
+];
+
+// ─── STATE ───────────────────────────────────────────────────────────────────
+let current = null;
+const DONE_KEY = 'usnco_done';
+function getDone(){try{return JSON.parse(localStorage.getItem(DONE_KEY))||[];}catch{return[];}}
+function setDone(arr){localStorage.setItem(DONE_KEY,JSON.stringify(arr));}
+
+// ─── RENDER NAV ──────────────────────────────────────────────────────────────
+function renderNav(){
+  const done = getDone();
+  const nav = document.getElementById('nav-list');
+  nav.innerHTML = UNITS.map(u=>`
+    <div class="nav-item ${current===u.id?'active':''} ${done.includes(u.id)?'done':''}"
+         onclick="loadUnit(${u.id})">
+      <div class="nav-num">${done.includes(u.id)?'✓':u.id}</div>
+      <div class="nav-label">${u.title}</div>
+    </div>
+  `).join('');
+  // Progress
+  const n = done.length;
+  document.getElementById('prog-text').textContent = `${n} / 15`;
+  document.getElementById('prog-fill').style.width = (n/15*100)+'%';
+}
+
+// ─── LOAD UNIT ───────────────────────────────────────────────────────────────
+function loadUnit(id){
+  current = id;
+  closeSidebar();
+  const u = UNITS.find(x=>x.id===id);
+  const done = getDone();
+  document.getElementById('tb-crumb').textContent = `Unit ${id} of 15`;
+  document.getElementById('tb-title').textContent = u.title;
+  document.getElementById('btn-done').textContent = done.includes(id) ? '✓ Completed' : '✓ Mark Done';
+  document.getElementById('btn-prev').style.opacity = id===1?'0.3':'1';
+  document.getElementById('btn-next').style.opacity = id===15?'0.3':'1';
+  const area = document.getElementById('content-area');
+  area.innerHTML = `
+    <div class="content-wrap">
+      <div class="unit-hero">
+        <div class="unit-badge">${u.emoji} Unit ${u.id}</div>
+        <h1>${u.title}</h1>
+        <p class="lead">${u.lead}</p>
+        <div class="hero-tags">${u.topics.map(t=>`<span class="htag">${t}</span>`).join('')}</div>
+      </div>
+      ${u.content}
+    </div>`;
+  renderNav();
+  window.scrollTo(0,0);
+}
+
+// ─── TOGGLE DONE ─────────────────────────────────────────────────────────────
+function toggleDone(){
+  if(!current) return;
+  let done = getDone();
+  if(done.includes(current)) done = done.filter(x=>x!==current);
+  else done.push(current);
+  setDone(done);
+  document.getElementById('btn-done').textContent = done.includes(current)?'✓ Completed':'✓ Mark Done';
+  renderNav();
+}
+
+// ─── NAVIGATION ──────────────────────────────────────────────────────────────
+function navUnit(dir){
+  const next = (current||0) + dir;
+  if(next>=1 && next<=15) loadUnit(next);
+}
+
+// ─── HOME SCREEN ─────────────────────────────────────────────────────────────
+function loadHome(){
+  current = null;
+  document.getElementById('tb-crumb').textContent = 'USNCO Prep';
+  document.getElementById('tb-title').textContent = 'All Units';
+  document.getElementById('btn-prev').style.opacity='0.3';
+  document.getElementById('btn-next').style.opacity='1';
+  const done = getDone();
+  const area = document.getElementById('content-area');
+  area.innerHTML = `
+    <div class="content-wrap">
+      <div class="unit-hero">
+        <div class="unit-badge">🏆 USNCO</div>
+        <h1>Chemistry Master Guide</h1>
+        <p class="lead">All 15 USNCO topics — key concepts, formulas, tables, and exam tips. Select a unit to begin studying, or pick up where you left off.</p>
+        <div class="hero-tags">
+          <span class="htag">${done.length} of 15 completed</span>
+          <span class="htag">60+ Key Formulas</span>
+          <span class="htag">All Core Tables</span>
+        </div>
+      </div>
+      <div class="home-grid">
+        ${UNITS.map(u=>`
+          <div class="home-card" onclick="loadUnit(${u.id})">
+            <div class="hc-num">Unit ${u.id}</div>
+            <div class="hc-title">${u.emoji} ${u.title}</div>
+            <div class="hc-topics">${u.topics.slice(0,3).join(' · ')}${u.topics.length>3?'…':''}</div>
+            <span class="hc-badge ${done.includes(u.id)?'done-badge':'todo-badge'}">${done.includes(u.id)?'✓ Done':'Not started'}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>`;
+  renderNav();
+}
+
+// ─── SIDEBAR ─────────────────────────────────────────────────────────────────
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('show');
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('show');
+}
+
+// ─── LOGO CLICK ──────────────────────────────────────────────────────────────
+document.querySelector('.logo-wrap').style.cursor='pointer';
+document.querySelector('.logo-wrap').addEventListener('click',loadHome);
+
+// ─── INIT ────────────────────────────────────────────────────────────────────
+renderNav();
+loadHome();
+</script>
+</body>
+</html>
