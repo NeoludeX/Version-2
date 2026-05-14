@@ -150,6 +150,27 @@ tr:hover td{background:var(--bg2)}
 .done-badge{background:rgba(52,211,153,.15);color:var(--green)}
 .todo-badge{background:var(--bg4);color:var(--dim)}
 
+
+/* ENHANCED LEARNING VISUALS */
+.diagram-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.diagram-card{background:var(--bg2);border:1px solid var(--border);border-radius:13px;padding:14px}
+.diagram-card h4{font-family:'Space Grotesk',sans-serif;font-size:13px;margin-bottom:8px}
+.atom-diagram{position:relative;height:180px;border-radius:10px;background:radial-gradient(circle at center,rgba(79,142,247,.25),transparent 40%)}
+.nucleus{position:absolute;inset:0;margin:auto;width:26px;height:26px;border-radius:50%;background:var(--accent);box-shadow:0 0 18px rgba(79,142,247,.55)}
+.orbit{position:absolute;inset:0;margin:auto;border:1px dashed rgba(226,232,247,.2);border-radius:50%}
+.orbit.o1{width:70px;height:70px}.orbit.o2{width:120px;height:120px}
+.electron{position:absolute;width:8px;height:8px;border-radius:50%;background:var(--cyan);animation:spin 4s linear infinite;transform-origin:35px 35px}
+.orbit.o2 .electron{animation-duration:6s;transform-origin:60px 60px}
+@keyframes spin{from{transform:rotate(0deg) translateX(35px)}to{transform:rotate(360deg) translateX(35px)}}
+.timeline{display:flex;gap:8px;overflow:auto;padding-bottom:4px}
+.t-node{min-width:150px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px}
+.t-node small{color:var(--muted)}
+.sublesson-list details{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:10px}
+.sublesson-list summary{cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:13px}
+.glossary{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.g-item{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:10px 12px}
+.g-item strong{color:var(--cyan);font-size:12px;display:block;margin-bottom:3px}
+
 /* OVERLAY */
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:99}
 .overlay.show{display:block}
@@ -915,6 +936,35 @@ const UNITS = [
   }
 ];
 
+// ─── ENHANCEMENTS ───────────────────────────────────────────────────────────────
+
+const SUBLESSONS={
+1:[['Atomic number vs mass number','Z counts protons and defines the element, while A counts protons + neutrons and changes across isotopes.'],['Quantum numbers breakdown','n gives shell size, l gives subshell shape, ml gives orbital orientation, and ms gives spin direction.'],['Periodicity cause-and-effect','Most periodic trends come from rising effective nuclear charge across a period and rising shell count down a group.']],
+2:[['Lewis structures workflow','Count valence electrons, place bonds, complete octets, then minimize formal charge.'],['VSEPR in steps','Count electron domains, map electron geometry, then account for lone pairs to get molecular shape.']],
+3:[['Limiting reagent logic','Convert everything to moles and compare moles divided by coefficient. Smallest value limits product.']]
+};
+
+function buildDiagramSection(unitId){
+  if(unitId!==1) return `<div class="diagram-grid"><div class="diagram-card"><h4>Process timeline</h4><div class="timeline"><div class="t-node"><strong>Learn</strong><br><small>Read the rule</small></div><div class="t-node"><strong>Visualize</strong><br><small>Map to diagram</small></div><div class="t-node"><strong>Practice</strong><br><small>Solve examples</small></div></div></div></div>`;
+  return `<div class="diagram-grid"><div class="diagram-card"><h4>Animated electron shells</h4><div class="atom-diagram"><div class="orbit o1"><div class="electron"></div></div><div class="orbit o2"><div class="electron"></div></div><div class="nucleus"></div></div></div><div class="diagram-card"><h4>Lesson flow map</h4><div class="timeline"><div class="t-node"><strong>Particles</strong><br><small>p⁺ n⁰ e⁻</small></div><div class="t-node"><strong>Orbitals</strong><br><small>s p d f</small></div><div class="t-node"><strong>Configurations</strong><br><small>Aufbau + Hund</small></div></div></div></div>`;
+}
+
+function buildSublessons(unitId){
+  const items=SUBLESSONS[unitId];
+  if(!items) return '';
+  return `<div class="sublesson-list">${items.map(([t,b],i)=>`<details ${i===0?'open':''}><summary>Sub-lesson ${i+1}: ${t}</summary><p style="margin-top:8px;color:var(--muted)">${b}</p></details>`).join('')}</div>`;
+}
+
+function buildGlossary(){
+ return `<div class="glossary"><div class="g-item"><strong>σ (sigma)</strong>Single covalent bond created by head-on orbital overlap.</div><div class="g-item"><strong>π (pi)</strong>Bond from sideways orbital overlap; appears in double/triple bonds.</div><div class="g-item"><strong>Δ (delta)</strong>Means “change in”, like ΔH for enthalpy change.</div><div class="g-item"><strong>K, Q</strong>K is equilibrium ratio at equilibrium; Q is the same ratio at any moment.</div></div>`;
+}
+
+function enhanceLesson(unitId){
+ const wrap=document.querySelector('.content-wrap'); if(!wrap) return;
+ const extra=`<div class="divider"></div><div class="section"><div class="sec-hdr"><div class="sec-icon" style="background:rgba(52,211,153,.12)">🧭</div><div class="sec-title">Deep-dive sub-lessons</div></div>${buildSublessons(unitId) || '<p style="color:var(--muted)">This unit includes focused concept blocks and worked examples in each section. Continue to each card/table in order for full depth.</p>'}</div><div class="section"><div class="sec-hdr"><div class="sec-icon" style="background:rgba(79,142,247,.12)">🖼️</div><div class="sec-title">Visual learning diagrams</div></div>${buildDiagramSection(unitId)}</div><div class="section"><div class="sec-hdr"><div class="sec-icon" style="background:rgba(167,139,250,.12)">📚</div><div class="sec-title">Symbols & quick glossary</div></div>${buildGlossary()}</div>`;
+ wrap.insertAdjacentHTML('beforeend',extra);
+}
+
 // ─── STATE ───────────────────────────────────────────────────────────────────
 let current = null;
 const DONE_KEY = 'usnco_done';
@@ -961,6 +1011,7 @@ function loadUnit(id){
       ${u.content}
     </div>`;
   renderNav();
+  enhanceLesson(id);
   window.scrollTo(0,0);
 }
 
