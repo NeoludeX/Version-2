@@ -163,6 +163,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .orbital-name{font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;color:var(--txt)}
 .orbital-desc{font-size:11px;color:var(--mut);margin-top:3px}
 
+<<<<<<< HEAD
 /* ─── BOHR ANIMATION ────────────────────────────────────────────────── */
 .bohr-wrap{position:relative;width:280px;height:280px;margin:0 auto}
 .bohr-nucleus{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:36px;height:36px;border-radius:50%;background:radial-gradient(circle,#f87171,#c53030);box-shadow:0 0 20px rgba(248,113,113,.4);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:600;color:#fff;z-index:5}
@@ -216,6 +217,30 @@ tr:hover td{background:rgba(255,255,255,.02)}
 canvas{border-radius:8px;display:block}
 
 /* ─── OVERLAY / RESPONSIVE ──────────────────────────────────────────── */
+=======
+
+/* ENHANCED LEARNING VISUALS */
+.diagram-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.diagram-card{background:var(--bg2);border:1px solid var(--border);border-radius:13px;padding:14px}
+.diagram-card h4{font-family:'Space Grotesk',sans-serif;font-size:13px;margin-bottom:8px}
+.atom-diagram{position:relative;height:180px;border-radius:10px;background:radial-gradient(circle at center,rgba(79,142,247,.25),transparent 40%)}
+.nucleus{position:absolute;inset:0;margin:auto;width:26px;height:26px;border-radius:50%;background:var(--accent);box-shadow:0 0 18px rgba(79,142,247,.55)}
+.orbit{position:absolute;inset:0;margin:auto;border:1px dashed rgba(226,232,247,.2);border-radius:50%}
+.orbit.o1{width:70px;height:70px}.orbit.o2{width:120px;height:120px}
+.electron{position:absolute;width:8px;height:8px;border-radius:50%;background:var(--cyan);animation:spin 4s linear infinite;transform-origin:35px 35px}
+.orbit.o2 .electron{animation-duration:6s;transform-origin:60px 60px}
+@keyframes spin{from{transform:rotate(0deg) translateX(35px)}to{transform:rotate(360deg) translateX(35px)}}
+.timeline{display:flex;gap:8px;overflow:auto;padding-bottom:4px}
+.t-node{min-width:150px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px}
+.t-node small{color:var(--muted)}
+.sublesson-list details{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:10px}
+.sublesson-list summary{cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:13px}
+.glossary{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.g-item{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:10px 12px}
+.g-item strong{color:var(--cyan);font-size:12px;display:block;margin-bottom:3px}
+
+/* OVERLAY */
+>>>>>>> 1bdf3eb0288c405756565b43d65a432c57d084ba
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:99}
 .overlay.show{display:block}
 @media(max-width:820px){
@@ -274,6 +299,7 @@ canvas{border-radius:8px;display:block}
 ══════════════════════════════════════════════════════════════════════ */
 const Diagrams = {
 
+<<<<<<< HEAD
   bohrModel: function(id) {
     const el = document.getElementById(id);
     if(!el) return;
@@ -305,6 +331,123 @@ const Diagrams = {
           <span><span class="legend-dot" style="background:var(--acc)"></span>n=1 shell (max 2e⁻)</span>
           <span><span class="legend-dot" style="background:var(--cy)"></span>n=2 shell (max 8e⁻)</span>
           <span><span class="legend-dot" style="background:var(--gr)"></span>n=3 shell (max 18e⁻)</span>
+=======
+// ─── ENHANCEMENTS ───────────────────────────────────────────────────────────────
+
+const SUBLESSONS={
+1:[['Atomic number vs mass number','Z counts protons and defines the element, while A counts protons + neutrons and changes across isotopes.'],['Quantum numbers breakdown','n gives shell size, l gives subshell shape, ml gives orbital orientation, and ms gives spin direction.'],['Periodicity cause-and-effect','Most periodic trends come from rising effective nuclear charge across a period and rising shell count down a group.']],
+2:[['Lewis structures workflow','Count valence electrons, place bonds, complete octets, then minimize formal charge.'],['VSEPR in steps','Count electron domains, map electron geometry, then account for lone pairs to get molecular shape.']],
+3:[['Limiting reagent logic','Convert everything to moles and compare moles divided by coefficient. Smallest value limits product.']]
+};
+
+function buildDiagramSection(unitId){
+  if(unitId!==1) return `<div class="diagram-grid"><div class="diagram-card"><h4>Process timeline</h4><div class="timeline"><div class="t-node"><strong>Learn</strong><br><small>Read the rule</small></div><div class="t-node"><strong>Visualize</strong><br><small>Map to diagram</small></div><div class="t-node"><strong>Practice</strong><br><small>Solve examples</small></div></div></div></div>`;
+  return `<div class="diagram-grid"><div class="diagram-card"><h4>Animated electron shells</h4><div class="atom-diagram"><div class="orbit o1"><div class="electron"></div></div><div class="orbit o2"><div class="electron"></div></div><div class="nucleus"></div></div></div><div class="diagram-card"><h4>Lesson flow map</h4><div class="timeline"><div class="t-node"><strong>Particles</strong><br><small>p⁺ n⁰ e⁻</small></div><div class="t-node"><strong>Orbitals</strong><br><small>s p d f</small></div><div class="t-node"><strong>Configurations</strong><br><small>Aufbau + Hund</small></div></div></div></div>`;
+}
+
+function buildSublessons(unitId){
+  const items=SUBLESSONS[unitId];
+  if(!items) return '';
+  return `<div class="sublesson-list">${items.map(([t,b],i)=>`<details ${i===0?'open':''}><summary>Sub-lesson ${i+1}: ${t}</summary><p style="margin-top:8px;color:var(--muted)">${b}</p></details>`).join('')}</div>`;
+}
+
+function buildGlossary(){
+ return `<div class="glossary"><div class="g-item"><strong>σ (sigma)</strong>Single covalent bond created by head-on orbital overlap.</div><div class="g-item"><strong>π (pi)</strong>Bond from sideways orbital overlap; appears in double/triple bonds.</div><div class="g-item"><strong>Δ (delta)</strong>Means “change in”, like ΔH for enthalpy change.</div><div class="g-item"><strong>K, Q</strong>K is equilibrium ratio at equilibrium; Q is the same ratio at any moment.</div></div>`;
+}
+
+function enhanceLesson(unitId){
+ const wrap=document.querySelector('.content-wrap'); if(!wrap) return;
+ const extra=`<div class="divider"></div><div class="section"><div class="sec-hdr"><div class="sec-icon" style="background:rgba(52,211,153,.12)">🧭</div><div class="sec-title">Deep-dive sub-lessons</div></div>${buildSublessons(unitId) || '<p style="color:var(--muted)">This unit includes focused concept blocks and worked examples in each section. Continue to each card/table in order for full depth.</p>'}</div><div class="section"><div class="sec-hdr"><div class="sec-icon" style="background:rgba(79,142,247,.12)">🖼️</div><div class="sec-title">Visual learning diagrams</div></div>${buildDiagramSection(unitId)}</div><div class="section"><div class="sec-hdr"><div class="sec-icon" style="background:rgba(167,139,250,.12)">📚</div><div class="sec-title">Symbols & quick glossary</div></div>${buildGlossary()}</div>`;
+ wrap.insertAdjacentHTML('beforeend',extra);
+}
+
+// ─── STATE ───────────────────────────────────────────────────────────────────
+let current = null;
+const DONE_KEY = 'usnco_done';
+function getDone(){try{return JSON.parse(localStorage.getItem(DONE_KEY))||[];}catch{return[];}}
+function setDone(arr){localStorage.setItem(DONE_KEY,JSON.stringify(arr));}
+
+// ─── RENDER NAV ──────────────────────────────────────────────────────────────
+function renderNav(){
+  const done = getDone();
+  const nav = document.getElementById('nav-list');
+  nav.innerHTML = UNITS.map(u=>`
+    <div class="nav-item ${current===u.id?'active':''} ${done.includes(u.id)?'done':''}"
+         onclick="loadUnit(${u.id})">
+      <div class="nav-num">${done.includes(u.id)?'✓':u.id}</div>
+      <div class="nav-label">${u.title}</div>
+    </div>
+  `).join('');
+  // Progress
+  const n = done.length;
+  document.getElementById('prog-text').textContent = `${n} / 15`;
+  document.getElementById('prog-fill').style.width = (n/15*100)+'%';
+}
+
+// ─── LOAD UNIT ───────────────────────────────────────────────────────────────
+function loadUnit(id){
+  current = id;
+  closeSidebar();
+  const u = UNITS.find(x=>x.id===id);
+  const done = getDone();
+  document.getElementById('tb-crumb').textContent = `Unit ${id} of 15`;
+  document.getElementById('tb-title').textContent = u.title;
+  document.getElementById('btn-done').textContent = done.includes(id) ? '✓ Completed' : '✓ Mark Done';
+  document.getElementById('btn-prev').style.opacity = id===1?'0.3':'1';
+  document.getElementById('btn-next').style.opacity = id===15?'0.3':'1';
+  const area = document.getElementById('content-area');
+  area.innerHTML = `
+    <div class="content-wrap">
+      <div class="unit-hero">
+        <div class="unit-badge">${u.emoji} Unit ${u.id}</div>
+        <h1>${u.title}</h1>
+        <p class="lead">${u.lead}</p>
+        <div class="hero-tags">${u.topics.map(t=>`<span class="htag">${t}</span>`).join('')}</div>
+      </div>
+      ${u.content}
+    </div>`;
+  renderNav();
+  enhanceLesson(id);
+  window.scrollTo(0,0);
+}
+
+// ─── TOGGLE DONE ─────────────────────────────────────────────────────────────
+function toggleDone(){
+  if(!current) return;
+  let done = getDone();
+  if(done.includes(current)) done = done.filter(x=>x!==current);
+  else done.push(current);
+  setDone(done);
+  document.getElementById('btn-done').textContent = done.includes(current)?'✓ Completed':'✓ Mark Done';
+  renderNav();
+}
+
+// ─── NAVIGATION ──────────────────────────────────────────────────────────────
+function navUnit(dir){
+  const next = (current||0) + dir;
+  if(next>=1 && next<=15) loadUnit(next);
+}
+
+// ─── HOME SCREEN ─────────────────────────────────────────────────────────────
+function loadHome(){
+  current = null;
+  document.getElementById('tb-crumb').textContent = 'USNCO Prep';
+  document.getElementById('tb-title').textContent = 'All Units';
+  document.getElementById('btn-prev').style.opacity='0.3';
+  document.getElementById('btn-next').style.opacity='1';
+  const done = getDone();
+  const area = document.getElementById('content-area');
+  area.innerHTML = `
+    <div class="content-wrap">
+      <div class="unit-hero">
+        <div class="unit-badge">🏆 USNCO</div>
+        <h1>Chemistry Master Guide</h1>
+        <p class="lead">All 15 USNCO topics — key concepts, formulas, tables, and exam tips. Select a unit to begin studying, or pick up where you left off.</p>
+        <div class="hero-tags">
+          <span class="htag">${done.length} of 15 completed</span>
+          <span class="htag">60+ Key Formulas</span>
+          <span class="htag">All Core Tables</span>
+>>>>>>> 1bdf3eb0288c405756565b43d65a432c57d084ba
         </div>
       </div>
       <div class="diagram-caption">The Bohr model shows electrons orbiting the nucleus in fixed energy levels (shells). In reality, electrons exist in probability clouds (orbitals) described by quantum mechanics — but the Bohr model correctly predicts hydrogen's emission spectrum.</div>
